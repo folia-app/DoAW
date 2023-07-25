@@ -6,6 +6,6 @@
   "scripts": {
     "start": "npx live-server --port=3000 --entry-file=index.html"
   },
-  "author": "",
+  "author": "Joan Heemskerk (@johee)",
   "license": "ISC"
 }
