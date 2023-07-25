@@ -1,1 +1,26 @@
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Output of build tools
+dist/
+build/
+tmp/
+out/
+public/
+
+# Environment variables
+.env
+
+# IDE files
+.vscode/
+.idea/
+
+# Miscellaneous
+*.swp
 .DS_Store
+Thumbs.db
