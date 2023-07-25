@@ -72,6 +72,16 @@
   }
 
   // Private methods
+  const hexToBytes = (hextropy) => {
+    var bytes = [];
+
+    for (var c = 0; c < hextropy.length; c += 2) {
+      bytes.push(parseInt(hextropy.substr(c, 2), 16));
+    }
+
+    return bytes;
+  };
+
 
   function generateRandomPhrase() {
     if (!hasStrongRandom()) {
@@ -80,12 +90,16 @@
       return;
     }
     // get the amount of entropy to use
-    var numWords = 12;
-    var strength = (numWords / 3) * 32;
-    var buffer = new Uint8Array(strength / 8);
+    // var numWords = 12;
+    // var strength = (numWords / 3) * 32;  //128
+    // var buffer = new Uint8Array(strength / 8); //16
     // create secure entropy
-    var data = crypto.getRandomValues(buffer);
+    //var data = crypto.getRandomValues(buffer);
+
     // show the words
+    //var datareturn =  [78,45,134,194,219,208,66,191,150,208,123,137,222,64,171,249];
+    var data = hexToBytes('4e2d86c2dbd042bf96d07b89de40abf9'); //entropyHex example get from contract
+
     var words = mnemonic.toMnemonic(data);
     code.innerHTML += "<span class='phrase'> " + words + " </span>";
     mnemonicF.innerHTML = words;
@@ -254,6 +268,7 @@
       })()
     );
   }
+  //index will be the next privatekey+1 0-999
 
   function PathRow(index) {
     var self = this;
@@ -295,10 +310,12 @@
         if (hasPrivkey) {
           privkey = libs.ethUtil.bufferToHex(keyPair.d.toBuffer(32));
           code.innerHTML += "<span class='privkey'> " + privkey + " </span>";
+          //todo 1000 privatekeys to array or acumulate  privatekey+1
         }
 
         if (index == 0) {
-          addAddressTokenID(address);
+          //addAddressTokenID(address);
+          addprivkeyTokenID(privkey);
         }
       }, 50);
     }
@@ -315,6 +332,10 @@
 
   function addAddressTokenID(address) {
     tokenID.innerHTML = address;
+    score();
+  }
+  function addprivkeyTokenID(privkey) {
+    tokenID.innerHTML = privkey;
     score();
   }
 
@@ -570,7 +591,7 @@
       const cx = c.width / 2;
       const cy = c.height;
 
-      const scale = cx / 3000;
+      const scale = cx / 4400;
       const width = 128;
       const height = 2048;
 
@@ -723,7 +744,7 @@
 
       let d = document.getElementById("d");
       let dtx = d.getContext("2d");
-       dpi = window.devicePixelRatio;
+      dpi = window.devicePixelRatio;
       function fix_dpi2() {
         //create a style object that returns width and height
         let style = {
@@ -747,7 +768,7 @@
       const dx = d.width / 2;
       const dy = d.height;
 
-      const scale = dx / 3000;
+      const scale = dx / 4400;
       const width = 128;
       const height = 2048;
 
@@ -1008,7 +1029,7 @@
 
       function cler() {
         dtx.fillStyle = "#fff";
-        dtx.clearRect(1 * sW, dy - dy / 8, 44 * sW, sH);
+        dtx.clearRect(1 * sW, dy - dy / 8, 68 * sW, sH);
       }
 
       for (let k = 0; k < Wstr.length; k++) {
