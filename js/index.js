@@ -969,7 +969,7 @@
 
       var Nextstr = tokenID2.slice(0, -2).concat(hexxx);
 
-      var Wstr = tokenID.replace("0x", "ox").toLowerCase().concat("zy");;
+      var Wstr = tokenID.replace("0x", "ox").toLowerCase().concat("zzzy");;
       
 
       if (hexc == "o" || hexc == "x") {
@@ -1033,8 +1033,8 @@
        
         // dtx.fillText("Hello world", 50, 100);
         if (Wstr[k] == "y") {
-          k = Wstr.length;
-          setTimeout(cler, 400);
+          // k = Wstr.length;
+          // setTimeout(cler, 400);
         } else {
         
           if (Wstr[k] == "o") {
