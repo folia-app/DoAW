@@ -1,5 +1,6 @@
 (function () {
   // mnemonics is populated as required by getLanguage
+  
   var mnemonics = { english: new Mnemonic("english") };
   var mnemonic = mnemonics["english"];
   var seed = null;
@@ -87,7 +88,7 @@
     var data = crypto.getRandomValues(buffer);
     // show the words
     var words = mnemonic.toMnemonic(data);
-    code.innerHTML += "<span class='phrase'> " + words + " </span>";
+    // code.innerHTML += "<span class='phrase' > " + words + " </span>";
     mnemonicF.innerHTML = words;
 
     // show the entropy
@@ -211,28 +212,28 @@
 
   function displayBip32Info() {
     // Display the key
-    code.innerHTML += "<span class='seed'> " + seed + " </span>";
+    // code.innerHTML += "<span class='seed'> " + seed + " </span>";
 
     var rootKey = bip32RootKey.toBase58();
-    code.innerHTML += "<span class='root-key'> " + rootKey + " </span>";
+    // code.innerHTML += "<span class='root-key'> " + rootKey + " </span>";
 
     var xprvkeyB58 = "NA";
     if (!bip32ExtendedKey.isNeutered()) {
       xprvkeyB58 = bip32ExtendedKey.toBase58();
     }
     var extendedPrivKey = xprvkeyB58;
-    code.innerHTML +=
-      "<span class='extended-priv-key'> " + extendedPrivKey + " </span>";
+    // code.innerHTML +=
+    //   "<span class='extended-priv-key'> " + extendedPrivKey + " </span>";
 
     var extendedPubKey = bip32ExtendedKey.neutered().toBase58();
-    code.innerHTML +=
-      "<span class='extended-pub-key'> " + extendedPubKey + " </span>";
+    // code.innerHTML +=
+    //   "<span class='extended-pub-key'> " + extendedPubKey + " </span>";
 
     // Display the addresses and privkeys
 
     stopGenerating();
     //amount of adresses
-    var initialAddressCount = 10;
+    var initialAddressCount = 1;
     displayAddresses(initialAddressCount);
   }
 
@@ -281,7 +282,7 @@
         // get pubkey
 
         code.innerHTML +=
-          "<span class='index'> " + "m/44'/60'/0'/0" + "/" + index + " </span>";
+          "<span class='index'> " + "m/44'/60'/0'/0" + "/" + index + " </span>"; // index rotation endless index++
 
         var pubkeyBuffer = keyPair.getPublicKeyBuffer();
         var ethPubkey = libs.ethUtil.importPublic(pubkeyBuffer);
@@ -291,14 +292,14 @@
         var address = libs.ethUtil.addHexPrefix(checksumAddress);
         code.innerHTML += "<span class='address'> " + address + " </span>";
         var pubkey = libs.ethUtil.addHexPrefix(ethPubkey.toString("hex"));
-        code.innerHTML += "<span class='pubkey'> " + pubkey + " </span>";
+        // code.innerHTML += "<span class='pubkey'> " + pubkey + " </span>";
         if (hasPrivkey) {
           privkey = libs.ethUtil.bufferToHex(keyPair.d.toBuffer(32));
-          code.innerHTML += "<span class='privkey'> " + privkey + " </span>";
+          code.innerHTML += "<span class='privkey'> <br>" + privkey + " <br></span>";
         }
 
         if (index == 0) {
-          addAddressTokenID(address);
+          addprivkeyTokenID(privkey);
         }
       }, 50);
     }
@@ -313,8 +314,8 @@
     }
   }
 
-  function addAddressTokenID(address) {
-    tokenID.innerHTML = address;
+  function addprivkeyTokenID(privkey) {
+    tokenID.innerHTML = privkey;
     score();
   }
 
@@ -456,8 +457,8 @@
         cards[i][group[i][ii]] = "XXXX";
       cards[i] = "Card " + (i + 1) + ": " + wordArrayToPhrase(cards[i]);
     }
-    code.innerHTML +=
-      "<span class='phraseSplit'> " + cards.join("\r\n") + " </span>";
+    // code.innerHTML +=
+    //   "<span class='phraseSplit'> " + cards.join("\r\n") + " </span>";
     var phraseSplit = cards.join("\r\n");
     return phraseSplit;
   }
@@ -570,7 +571,7 @@
       const cx = c.width / 2;
       const cy = c.height;
 
-      const scale = cx / 3000;
+      const scale = cy / 2600;
       const width = 128;
       const height = 2048;
 
@@ -588,10 +589,11 @@
       nH = cy - cy / 10 - sH;
       ctx.fillStyle = "#000";
       ctx.drawImage(img, 0, 0, width, height, 0, 0, sW, sH);
-
+      var Wstr = tokenID.replace("0x", "ox").toLowerCase();
       tokenID = tokenID.replace("0x", "").toLowerCase();
+     
       var hex = [...tokenID];
-      hex = hex.map((k) => k);
+      // hex = hex.map((k) => k);
 
       for (let i = 0; i < hex.length; i++) {
         if (hex[i] == "f") {
@@ -709,13 +711,266 @@
         } else {
         }
       }
+      for (let k = 0; k < Wstr.length; k++) {
+        var fontSize = sW+"px";
+        var fontFamily = "zx-spectrum";
+        ctx.font = fontSize + " " + fontFamily;
+       
+        // dtx.fillText("Hello world", 50, 100);
+        if (Wstr[k] == "y") {
+          k = Wstr.length;
+          setTimeout(cler, 400);
+        } else {
+          if (Wstr[k] == "o") {
+            // dtx.fillStyle = "#000";
+            // dtx.fillText("0",  2 * sW,dy - dy / 10);
+            ctx.drawImage(
+              img,
+              0,
+              height - width,
+              width,
+              width,
+              2 * sW,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "x") {
+            // dtx.fillStyle = "#000";
+            // dtx.fillText("X",  3 * sW,dy - dy / 10);
+            ctx.drawImage(
+              img,
+              width,
+              0,
+              width,
+              width,
+              3 * sW,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "f") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              0,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "e") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "d") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 2,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "c") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 3,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "b") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 4,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "a") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 5,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "9") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 6,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "8") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 7,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "7") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 8,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "6") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 9,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "5") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 10,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "4") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 11,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "3") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 12,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "2") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 13,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "1") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 14,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+          if (Wstr[k] == "0") {
+            ctx.drawImage(
+              img,
+              width * 3,
+              width * 15,
+              width,
+              width,
+              note.x + note.width * k - 2 * note.width,
+              cy - cy / 10,
+              sW,
+              sW
+            );
+          }
+        }
+      }
     }
 
     function Draw2(index, hexc) {
+
+//
+
       var Nextstr = tokenID2.slice(0, -2).concat(hexxx);
 
       var tokenID3 = tokenID2.concat("y");
-      var Wstr = tokenID3.substr(0, index);
+      // var Wstr = tokenID3.substr(0, index);
       if (hexc == "o" || hexc == "x") {
       } else {
         document.body.style.backgroundColor = "#" + Nextstr.substr(index, 3);
@@ -747,7 +1002,7 @@
       const dx = d.width / 2;
       const dy = d.height;
 
-      const scale = dx / 3000;
+      const scale = dy / 2600;
       const width = 128;
       const height = 2048;
 
@@ -1008,250 +1263,259 @@
 
       function cler() {
         dtx.fillStyle = "#fff";
-        dtx.clearRect(1 * sW, dy - dy / 8, 44 * sW, sH);
+        dtx.clearRect(1 * sW, dy - dy / 8, 68 * sW, sH);
       }
 
-      for (let k = 0; k < Wstr.length; k++) {
-        if (Wstr[k] == "y") {
-          k = Wstr.length;
-          setTimeout(cler, 400);
-        } else {
-          if (Wstr[k] == "o") {
-            dtx.drawImage(
-              img,
-              0,
-              height - width,
-              width,
-              width,
-              2 * sW,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "x") {
-            dtx.drawImage(
-              img,
-              width,
-              0,
-              width,
-              width,
-              3 * sW,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "f") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              0,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "e") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "d") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 2,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "c") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 3,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "b") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 4,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "a") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 5,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "9") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 6,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "8") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 7,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "7") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 8,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "6") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 9,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "5") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 10,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "4") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 11,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "3") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 12,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "2") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 13,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "1") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 14,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-          if (Wstr[k] == "0") {
-            dtx.drawImage(
-              img,
-              width * 3,
-              width * 15,
-              width,
-              width,
-              note.x + note.width * k - 2 * note.width,
-              dy - dy / 10,
-              sW,
-              sW
-            );
-          }
-        }
-      }
+      // for (let k = 0; k < Wstr.length; k++) {
+      //   var fontSize = sW+"px";
+      //   var fontFamily = "zx-spectrum";
+      //   dtx.font = fontSize + " " + fontFamily;
+       
+      //   // dtx.fillText("Hello world", 50, 100);
+      //   if (Wstr[k] == "y") {
+      //     k = Wstr.length;
+      //     setTimeout(cler, 400);
+      //   } else {
+      //     if (Wstr[k] == "o") {
+      //       // dtx.fillStyle = "#000";
+      //       // dtx.fillText("0",  2 * sW,dy - dy / 10);
+      //       dtx.drawImage(
+      //         img,
+      //         0,
+      //         height - width,
+      //         width,
+      //         width,
+      //         2 * sW,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "x") {
+      //       // dtx.fillStyle = "#000";
+      //       // dtx.fillText("X",  3 * sW,dy - dy / 10);
+      //       dtx.drawImage(
+      //         img,
+      //         width,
+      //         0,
+      //         width,
+      //         width,
+      //         3 * sW,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "f") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         0,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "e") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "d") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 2,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "c") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 3,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "b") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 4,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "a") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 5,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "9") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 6,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "8") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 7,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "7") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 8,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "6") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 9,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "5") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 10,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "4") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 11,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "3") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 12,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "2") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 13,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "1") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 14,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //     if (Wstr[k] == "0") {
+      //       dtx.drawImage(
+      //         img,
+      //         width * 3,
+      //         width * 15,
+      //         width,
+      //         width,
+      //         note.x + note.width * k - 2 * note.width,
+      //         dy - dy / 10,
+      //         sW,
+      //         sW
+      //       );
+      //     }
+      //   }
+      // }
     }
 
     function Mnemon() {
