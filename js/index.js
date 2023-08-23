@@ -91,15 +91,17 @@
     }
     // get the amount of entropy to use
     // var numWords = 12;
-    // var strength = (numWords / 3) * 32;  //128
+    // var strength = (numWords / 3) * 32;  // 128
     // var buffer = new Uint8Array(strength / 8); //16
     // create secure entropy
     //var data = crypto.getRandomValues(buffer);
 
     // show the words
     //var datareturn =  [78,45,134,194,219,208,66,191,150,208,123,137,222,64,171,249];
-    var data = hexToBytes('4e2d86c2dbd042bf96d07b89de40abf9'); //entropyHex example get from contract
-
+    var datareturn = [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 255]; // 128 bits
+    // var data = hexToBytes('4e2d86c2dbd042bf96d07b89de40abf9'); //entropyHex example get from contract
+    var data = datareturn//hexToBytes(datareturn); //entropyHex example get from contract
+    console.log({ data })
     var words = mnemonic.toMnemonic(data);
     code.innerHTML += "<span class='phrase'> " + words + " </span>";
     mnemonicF.innerHTML = words;
