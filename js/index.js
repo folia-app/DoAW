@@ -1,6 +1,6 @@
 (function () {
   // mnemonics is populated as required by getLanguage
-  
+
   var mnemonics = { english: new Mnemonic("english") };
   var mnemonic = mnemonics["english"];
   var seed = null;
@@ -506,7 +506,7 @@
     };
 
     var str1 = tokenID.replace("0x", "ox").toLowerCase();
-    
+
     var str2 = "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"; //hack 36 y before to make scrore come from right
     var str3 = "yyyy";//hack 4 y after to make scrore disapear left
     var tokenID2 = str2.concat(str1).concat(str3);
@@ -545,16 +545,16 @@
       }
     }
 
-   
+
 
     function Draw2(index, hexc) {
 
-//
+      //
 
       var Nextstr = tokenID2.slice(0, -2).concat(hexxx);
 
       var Wstr = tokenID2;
-      
+
 
       if (hexc == "o" || hexc == "x") {
       } else {
@@ -563,7 +563,7 @@
 
       let d = document.getElementById("d");
       let dtx = d.getContext("2d");
-       dpi = window.devicePixelRatio;
+      dpi = window.devicePixelRatio;
       function fix_dpi2() {
         //create a style object that returns width and height
         let style = {
@@ -606,21 +606,21 @@
 
       dtx.fillStyle = "#000";
       dtx.drawImage(img, 0, 0, width, height, 2 * sW, 0, sW, sH);
-     
+
       dtx.lineWidth = 2;
       i = index - 2;
 
       for (let k = 0; k < Wstr.length; k++) {
-        var fontSize = sW+"px";
+        var fontSize = sW + "px";
         var fontFamily = "zx-spectrum";
         dtx.font = fontSize + " " + fontFamily;
-       
+
         // dtx.fillText("Hello world", 50, 100);
         if (Wstr[k] == "y") {
           // k = Wstr.length;
           // setTimeout(cler, 400);
         } else {
-        
+
           if (Wstr[k] == "o") {
             // dtx.fillStyle = "#000";
             // dtx.fillText("0",  2 * sW,dy - dy / 10);
@@ -630,7 +630,7 @@
               height - width,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
@@ -645,7 +645,7 @@
               0,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
@@ -658,14 +658,14 @@
               0,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y,
               note.width,
               note.height
@@ -678,14 +678,14 @@
               width,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 1,
               note.width,
               note.height
@@ -698,14 +698,14 @@
               width * 2,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 2,
               note.width,
               note.height
@@ -718,14 +718,14 @@
               width * 3,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 3,
               note.width,
               note.height
@@ -738,14 +738,14 @@
               width * 4,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 4,
               note.width,
               note.height
@@ -758,14 +758,14 @@
               width * 5,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 5,
               note.width,
               note.height
@@ -778,14 +778,14 @@
               width * 6,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 6,
               note.width,
               note.height
@@ -798,14 +798,14 @@
               width * 7,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 7,
               note.width,
               note.height
@@ -818,14 +818,14 @@
               width * 8,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 8,
               note.width,
               note.height
@@ -838,14 +838,14 @@
               width * 9,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 9,
               note.width,
               note.height
@@ -858,14 +858,14 @@
               width * 10,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 10,
               note.width,
               note.height
@@ -878,14 +878,14 @@
               width * 11,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 11,
               note.width,
               note.height
@@ -898,14 +898,14 @@
               width * 12,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 12,
               note.width,
               note.height
@@ -918,14 +918,14 @@
               width * 13,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 13,
               note.width,
               note.height
@@ -938,14 +938,14 @@
               width * 14,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 14,
               note.width,
               note.height
@@ -958,14 +958,14 @@
               width * 15,
               width,
               width,
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               dy - dy / 10,
               sW,
               sW
             );
             dtx.fillStyle = "#000";
             dtx.fillRect(
-              note.x + note.width * k - 2 * note.width- (note.width * i),
+              note.x + note.width * k - 2 * note.width - (note.width * i),
               note.y + note.height * 15,
               note.width,
               note.height
@@ -974,257 +974,109 @@
         }
       }
 
-
-      if (hexc == "f") {
-        dtx.strokeStyle = "#333";
-        dtx.fillStyle = "#333";
-        dtx.fillRect(
-          note.x,
-          note.y,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "e") {
-        dtx.strokeStyle = "#00d";
-        dtx.fillStyle = "#00d";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 1,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 1,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "d") {
-        dtx.strokeStyle = "#d00";
-        dtx.fillStyle = "#d00";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 2,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 2,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "c") {
-        dtx.strokeStyle = "#d0d";
-        dtx.fillStyle = "#d0d";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 3,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 3,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "b") {
-        dtx.strokeStyle = "#0d0";
-        dtx.fillStyle = "#0d0";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 4,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 4,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "a") {
-        dtx.strokeStyle = "#0dd";
-        dtx.fillStyle = "#0dd";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 5,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 5,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "9") {
-        dtx.strokeStyle = "#dd0";
-        dtx.fillStyle = "#dd0";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 6,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 6,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "8") {
-        dtx.strokeStyle = "#ddd";
-        dtx.fillStyle = "#ddd";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 7,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 7,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "7") {
-        dtx.strokeStyle = "#000";
-        dtx.fillStyle = "#000";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 8,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 8,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "6") {
-        dtx.strokeStyle = "#00f";
-        dtx.fillStyle = "#00f";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 9,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 9,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "5") {
-        dtx.strokeStyle = "#f00";
-        dtx.fillStyle = "#f00";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 10,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 10,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "4") {
-        dtx.strokeStyle = "#f0f";
-        dtx.fillStyle = "#f0f";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 11,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 11,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "3") {
-        dtx.strokeStyle = "#0f0";
-        dtx.fillStyle = "#0f0";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 12,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 12,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "2") {
-        dtx.strokeStyle = "#0ff";
-        dtx.fillStyle = "#0ff";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 13,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 13,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "1") {
-        dtx.strokeStyle = "#ff0";
-        dtx.fillStyle = "#ff0";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 14,
-          note.width,
-          note.height
-        );
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 14,
-          note.width,
-          note.height
-        );
-      } else if (hexc == "0") {
-        dtx.strokeStyle = "#fff";
-        dtx.fillStyle = "#fff";
-        dtx.fillRect(
-          note.x,
-          note.y + note.height * 15,
-          note.width,
-          note.height
-        );
-        dtx.lineWidth = 1;
-        dtx.strokeRect(
-          note.x,
-          note.y + note.height * 15,
-          note.width,
-          note.height
-        );
-      } else {
+      const hex_to_color_key = {
+        "f": { color: "#333", multiplier: 0 },
+        "e": { color: "#00d", multiplier: 1 },
+        "d": { color: "#d00", multiplier: 2 },
+        "c": { color: "#d0d", multiplier: 3 },
+        "b": { color: "#0d0", multiplier: 4 },
+        "a": { color: "#0dd", multiplier: 5 },
+        "9": { color: "#dd0", multiplier: 6 },
+        "8": { color: "#ddd", multiplier: 7 },
+        "7": { color: "#000", multiplier: 8 },
+        "6": { color: "#00f", multiplier: 9 },
+        "5": { color: "#f00", multiplier: 10 },
+        "4": { color: "#f0f", multiplier: 11 },
+        "3": { color: "#0f0", multiplier: 12 },
+        "2": { color: "#0ff", multiplier: 13 },
+        "1": { color: "#ff0", multiplier: 14 },
+        "0": { color: "#fff", multiplier: 15 },
       }
 
-      function cler() {
-        dtx.fillStyle = "#fff";
-        dtx.clearRect(1 * sW, dy - dy / 8, 68 * sW, sH);
-      }
 
-      
+      let dtx_color, dtx_note_x = note.x, dtx_note_y = note.y;
+      switch (hexc) {
+        case "f":
+          dtx_color = "#333";
+          break;
+        case "e":
+          dtx_color = "#00d";
+          dtx_note_y += note.height * 1;
+          break;
+        case "d":
+          dtx_color = "#d00";
+          dtx_note_y += note.height * 2;
+          break;
+        case "c":
+          dtx_color = "#d0d";
+          dtx_note_y += note.height * 3;
+          break;
+        case "b":
+          dtx_color = "#0d0";
+          dtx_note_y += note.height * 4;
+          break;
+        case "a":
+          dtx_color = "#0dd";
+          dtx_note_y += note.height * 5;
+          break;
+        case "9":
+          dtx_color = "#dd0";
+          dtx_note_y += note.height * 6;
+          break;
+        case "8":
+          dtx_color = "#ddd";
+          dtx_note_y += note.height * 7;
+          break;
+        case "7":
+          dtx_color = "#000";
+          dtx_note_y += note.height * 8;
+          break;
+        case "6":
+          dtx_color = "#00f";
+          dtx_note_y += note.height * 9;
+          break;
+        case "5":
+          dtx_color = "#f00";
+          dtx_note_y += note.height * 10;
+          break;
+        case "4":
+          dtx_color = "#f0f";
+          dtx_note_y += note.height * 11;
+          break;
+        case "3":
+          dtx_color = "#0f0";
+          dtx_note_y += note.height * 12;
+          break;
+        case "2":
+          dtx_color = "#0ff";
+          dtx_note_y += note.height * 13;
+          break;
+        case "1":
+          dtx_color = "#ff0";
+          dtx_note_y += note.height * 14;
+          break;
+        case "0":
+          dtx_color = "#fff";
+          dtx_note_y += note.height * 15;
+          dtx.lineWidth = 1; // TODO: confirm the lineWidth doesn't change anywhere else? Does it need to be reset for others?
+          break;
+        default:
+          throw new Error("Invalid hex color: " + hexc);
+      }
+      dtx.strokeStyle = dtx_color;
+      dtx.fillStyle = dtx_color;
+      dtx.fillRect(
+        dtx_note_x,
+        dtx_note_y,
+        note.width,
+        note.height
+      );
+      dtx.strokeRect(
+        dtx_note_x,
+        dtx_note_y,
+        note.width,
+        note.height
+      );
     }
 
     function Mnemon() {
