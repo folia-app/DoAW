@@ -224,7 +224,12 @@
   function playScore() {
 
     Mnemon();
-    var tokenID2 = makeTokenID2()
+
+
+    var str1 = privkey.replace("0x", "ox").toLowerCase();
+    var str2 = "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"; //hack 37 y before to make scrore come from right
+    var str3 = "yyy";//hack 3 y after to make scrore disapear left
+    var tokenID2 = str2.concat(str1).concat(str3);
 
     var sounds = [...tokenID2];
     snds.src = "bithex/" + sounds[0] + ".mp3"; // TODO: preload these if there's delay on low speed network
@@ -247,8 +252,8 @@
         run();
       }
     };
+
     async function Draw(index, hexc) {
-      var tokenID2 = makeTokenID2()
       var Nextstr = tokenID2.slice(0, -2).concat(entropyHex);
       var Wstr = tokenID2;
 
@@ -409,13 +414,6 @@
       );
     }
 
-    function makeTokenID2() {
-      var str1 = privkey.replace("0x", "ox").toLowerCase();
-      var str2 = "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"; //hack 37 y before to make scrore come from right
-      var str3 = "yyy";//hack 3 y after to make scrore disapear left
-      return str2.concat(str1).concat(str3);
-    }
-
     function Mnemon() {
       let mFA = currentMnemonic.split(" ");
       let wdiv = document.getElementById("wdiv");
@@ -427,10 +425,53 @@
         wdiv.appendChild(cell);
       }
     }
+
+    // TODO: make draw global so this works properly
+    const onResize = () => {
+      Draw();
+    };
+    window.addEventListener("resize", onResize);
   }
 
-  const onResize = () => {
-    Draw();
-  };
-  window.addEventListener("resize", onResize);
+  // function findPhraseErrors(phrase) {
+  //   // Preprocess the words
+  //   phrase = mnemonicUtil.normalizeString(phrase);
+  //   var words = phraseToWordArray(phrase);
+  //   // Detect blank phrase
+  //   if (words.length == 0) {
+  //     return "Blank mnemonic";
+  //   }
+  //   // Check each word
+  //   for (var i = 0; i < words.length; i++) {
+  //     var word = words[i];
+  //     var language = getLanguage();
+  //     if (WORDLISTS[language].indexOf(word) == -1) {
+  //       console.log("Finding closest match to " + word);
+  //       var nearestWord = findNearestWord(word);
+  //       return word + " not in wordlist, did you mean " + nearestWord + "?";
+  //     }
+  //   }
+  //   // Check the words are valid
+  //   var properPhrase = wordArrayToPhrase(words);
+  //   var isValid = mnemonic.check(properPhrase);
+  //   if (!isValid) {
+  //     return "Invalid mnemonic";
+  //   }
+  //   return false;
+  // }
+  // function phraseToWordArray(phrase) {
+  //   var words = phrase.split(/\s/g);
+  //   var noBlanks = [];
+  //   for (var i = 0; i < words.length; i++) {
+  //     var word = words[i];
+  //     if (word.length > 0) {
+  //       noBlanks.push(word);
+  //     }
+  //   }
+  //   return noBlanks;
+  // }
+  // function wordArrayToPhrase(words) {
+  //   var phrase = words.join(" ");
+  //   return phrase;
+  // }
 })();
