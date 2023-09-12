@@ -28,7 +28,7 @@ p.customfont {
   display: table;
   text-align: center;
   background-color: #ccc;
-  z-index: 600;
+  z-index: 2;
 }
 .parent > .splash {
   background-color: #ccc;
@@ -39,7 +39,7 @@ p.customfont {
   font-size: 5vw;
   line-height: 5vw;
   cursor: crosshair;
-  z-index: 600;
+  z-index: 2;
 }
 p {
   font-family: "zx-spectrum", monospace;
@@ -49,6 +49,23 @@ p {
 .entropy {
   display: none;
 }
+
+#d {
+  position: absolute;
+  left: 0%;
+  width: 100%;
+  height: 88%;
+  bottom: 0%;
+  font-family: "zx-spectrum", monospace;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  z-index: 0;
+}
+
+/* (in case of nft) below should be on top !!!
+z-index doesnt work now because of click function */
 
 .code {
   box-sizing: border-box;
@@ -68,34 +85,11 @@ p {
   padding: 1em 1.5em;
   display: block;
   word-wrap: break-word;
+  z-index: 3;
 }
 
-#c {
-  position: absolute;
-  left: 0%;
-  width: 100%;
-  height: 88%;
-  bottom: 0%;
-  font-family: "zx-spectrum", monospace;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
 
-#d {
-  position: absolute;
-  left: 0%;
-  width: 100%;
-  height: 88%;
-  bottom: 0%;
-  font-family: "zx-spectrum", monospace;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  z-index: 0;
-}
+
 #wdiv {
   position: absolute;
   left: 0%;
@@ -111,4 +105,5 @@ p {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto;
   grid-gap: 1vh;
+  z-index: 3;
 }
