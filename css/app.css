@@ -1,87 +1,147 @@
-body, html {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    background-color: #ccc;
-    cursor: none;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-crisp-edges; 
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-    overflow: hidden;
-  }
+body,
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  background-color: #ccc;
+  /* cursor: none; */
+  /* cursor: crosshair; */
+  cursor: none;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* overflow: hidden; */
+}
+@font-face {
+  font-family: "zx-spectrum";
+  src: url(zx-spectrum.ttf) format("truetype");
+}
+p.customfont {
+  font-family: "zx-spectrum", Verdana, Tahoma;
+}
 
-.mnemonicF {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 6;
-    display: none;
+#hov{
+  font-family: "zx-spectrum", Verdana, Tahoma;
+  display:block;
+  position:absolute;
+  font-size:20px;
+  z-index:3;
 }
-.tokenID {
-    position: absolute;
-    top: 100px;
-    width: 100%;
-    z-index: 6;
-    display: none;
+.parent {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: table;
+  text-align: center;
+  background-color: #ccc;
+  z-index: 2;
 }
+.parent > .splash {
+  background-color: #ccc;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  font-family: "zx-spectrum", monospace;
+  font-size: 5vw;
+  line-height: 5vw;
+  cursor: crosshair;
+  z-index: 2;
+}
+#index{
+  padding-top:100vh;
+  text-align:center;
+}
+#index * {
+  width: calc(25vw - 4px);
+  height: 200px;
+  border:1px solid black;
+  margin: 1px;
+}
+#popup {
+  display: none;
+  padding: 20px;
+  max-width: 400px;
+  background-color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index:1;
+  border-width: 50px;
+  border-style: groove;
+  border-radius: 50px;
+  border-color: grey;
+}
+#popup p {
+  font-size: 1vw;
+  text-align: center;
+}
+p {
+  font-family: "zx-spectrum", monospace;
+  font-size: 10vw;
+  line-height: 5vw;
+}
+.entropy {
+  display: none;
+}
+
+#d {
+  position: absolute;
+  left: 0%;
+  width: 100%;
+  height: 88%;
+  bottom: 0%;
+  font-family: "zx-spectrum", monospace;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  z-index: 0;
+}
+
+/* (in case of nft) below should be on top !!!
+z-index doesnt work now because of click function */
+
 .code {
-    position: absolute;
-    top: 0px;
-    width: 100%;
-    z-index: 0;
-    word-break: break-all;
-    color: #666;
-    page-break-inside: avoid;
-    font-family: monospace;
-    font-size: 0.7vw;
-    line-height: 1.6;
-    margin-bottom: 1.5em;
-    max-width: 100%;
-    overflow: auto;
-    padding: 1em 1.5em;
-    display: block;
-    word-wrap: break-word;
+  box-sizing: border-box;
+  position: absolute;
+  top: 4%;
+  width: 100%;
+  z-index: 0;
+  word-break: break-all;
+  color: #666;
+  page-break-inside: avoid;
+  font-family: "zx-spectrum", monospace;
+  font-size: 0.7vw;
+  line-height: 1.6;
+  margin-bottom: 1.5em;
+  max-width: 100%;
+  overflow: auto;
+  padding: 1em 1.5em;
+  display: block;
+  word-wrap: break-word;
+  z-index: 3;
 }
 
 
-#c {
-    position: absolute;
-    left: 10%;
-    width: 80%;
-    height: 60%;
-    bottom:0%;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-crisp-edges; 
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-  }
 
-  #d {
-    position: absolute;
-    left: 10%;
-    width: 80%;
-    height: 60%;
-    bottom:0%;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-crisp-edges; 
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-    z-index: 600;
-  }
-  #wdiv {
-    position: absolute;
-    left: 20%;
-    width: 60%;
-    height: 15%;
-    top:5%;
-    text-transform: uppercase;
-    font-family: Menlo, Monaco, "Droid Sans Mono", Consolas, monospace;
-    letter-spacing: .2rem;
-    font-size: 2vw;
-    margin: 0px;
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    grid-gap: 1vh;
-  }
+#wdiv {
+  position: absolute;
+  left: 0%;
+  width: calc(100% - 20px);
+  height: 15%;
+  /* top: 5%; */
+  text-transform: uppercase;
+  /* font-family: Menlo, Monaco, "Droid Sans Mono", Consolas, monospace; */
+  font-family: "zx-spectrum", monospace;
+  /* letter-spacing: 0.2rem; */
+  font-size: 1vw;
+  margin: 10px;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto;
+  grid-gap: 1vh;
+  z-index: 3;
+}

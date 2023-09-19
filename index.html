@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head lang="en">
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>R4aW</title>
 
     <!-- 7-2023 -->
 
-    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/app.css"/>
 
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   </head>
   <body>
-    <div id="mnemonicF" class="mnemonicF"></div>
-    <div id="tokenID" class="tokenID"></div>
+    <div id="popup">
+      <p id="popupText"></p>
+    </div>
+    <div id="parent" class="parent">
+      <div id="splash" class="splash">R4aW<p>START</p>
+      </div>
+    </div>
     <div id="code" class="code"></div>
-
-    <canvas id="c"></canvas>
     <canvas id="d"></canvas>
     <div id="wdiv"></div>
-
-    <script src="js/jquery-3.2.1.js"></script>
-    <script src="js/bip39-libs.js"></script>
+    <div id="hov">MINT</div>
+    <div id="index"></div>
     <script src="js/sjcl-bip39.js"></script>
+    <script src="js/bip39-libs.js"></script>
     <script src="js/wordlist_english.js"></script>
     <script src="js/jsbip39.js"></script>
     <script src="js/index.js"></script>
