@@ -27,6 +27,7 @@ p.customfont {
   display:block;
   position:absolute;
   font-size:20px;
+  z-index:3;
 }
 .parent {
   position: absolute;
@@ -48,6 +49,35 @@ p.customfont {
   line-height: 5vw;
   cursor: crosshair;
   z-index: 2;
+}
+#index{
+  padding-top:100vh;
+  text-align:center;
+}
+#index * {
+  width: calc(25vw - 4px);
+  height: 200px;
+  border:1px solid black;
+  margin: 1px;
+}
+#popup {
+  display: none;
+  padding: 20px;
+  max-width: 400px;
+  background-color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index:1;
+  border-width: 50px;
+  border-style: groove;
+  border-radius: 50px;
+  border-color: grey;
+}
+#popup p {
+  font-size: 1vw;
+  text-align: center;
 }
 p {
   font-family: "zx-spectrum", monospace;

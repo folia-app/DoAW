@@ -34,11 +34,15 @@
     } else {
       if (window.location.hash !== "" && window.location.hash !== "#") {
         window.location.hash = ""
+        popdown()
       } else {
         window.location.hash = entropyHex
+        popup()
       }
     }
   }
+
+  populateIndex()
 
   let Draw
   const onResize = () => Draw && Draw()
@@ -47,6 +51,32 @@
   let img = new Image(), imgLoaded = false
   img.src = "bitimg/00.png";
   img.onload = () => imgLoaded = true
+
+  function popup() {
+    let popup = document.getElementById("popup");
+    popup.style.display = "block";
+    let popupText = document.getElementById("popupText");
+    popupText.innerHTML = "Connect Wallet to mint " + entropyHex;
+  }
+  function popdown() {
+    let popup = document.getElementById("popup");
+    popup.style.display = "none";
+  }
+
+  function populateIndex() {
+    let index = document.getElementById("index");
+    for (let i = 0; i < 10; i++) {
+      // append iframe to index
+      // let iframe = document.createElement("iframe");
+      // iframe.src = "/img/" + (Math.floor(Math.random() * 3) + 1) + ".png";
+      // iframe.className = "iframe";
+
+      let iframe = document.createElement("img");
+      iframe.src = "/img/" + (Math.floor(Math.random() * 3) + 1) + ".png";
+      index.appendChild(iframe);
+    }
+
+  }
 
   function run() {
     code.innerHTML = "";
