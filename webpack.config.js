@@ -69,17 +69,14 @@ module.exports = {
         { from: 'public' }
       ]
     }),
-    // new webpack.BannerPlugin({
-    //   banner: `
-    //     My Project
-    //     Copyright (c) 2021 My Company
-    //     Licensed under the MIT License
-    //   `,
-    //   entryOnly: true
-    // }),
     new LicenseWebpackPlugin({
       outputFilename: 'licenses.txt',
-      perChunkOutput: false
+      perChunkOutput: false,
+      licenseType: 'allow',
+      licenseTextOverrides: {
+        '@ethersproject/logger': 'unknown',
+        'hash.js': 'unknown',
+      }
     })
   ],
   module: {

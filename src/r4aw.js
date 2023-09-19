@@ -1,5 +1,4 @@
-const libs = require('./bip39-libs.js');
-const { Mnemonic } = require('./jsbip39.js');
+import { utils } from 'ethers';
 
 let snds = new Audio("bithex/0.mp3");
 
@@ -7,11 +6,9 @@ if (window.location.hash !== "" && window.location.hash !== "#") {
   document.getElementsByTagName("body")[0].classList.add("has-entropy");
   // get body
 }
-let privkey, entropyHex, address, currentMnemonic, addressIndex = 0
+let privkey, entropyHex, address, currentMnemonic, addressIndex = 0, dpi
 
-let seed, bip32RootKey, bip32ExtendedKey
-const network = libs.bitcoin.networks.bitcoin, mnemonicUtil = new Mnemonic("english")
-console.log({ network })
+let seed
 let code_el = document.getElementById("code");
 let splash = document.getElementById('parent')
 console.log("splash", splash)
@@ -85,36 +82,19 @@ function run() {
   code.innerHTML = "";
   wdiv.innerHTML = "";
   currentMnemonic = getMnemonicPhrase(window.location.hash);
-  console.log(currentMnemonic)
-  calcBip32RootKeyFromSeed(currentMnemonic)
-  const derivationPath = "m/44'/60'/0'/0";
-  var errorText = findDerivationPathErrors(derivationPath);
-  if (errorText) {
-    throw new Error(errorText); // TODO: catch error
-  }
-  bip32ExtendedKey = calcBip32ExtendedKey(derivationPath);
-
-  let key = bip32ExtendedKey.derive(addressIndex);
+  const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
+  const derivationPath = `m/44'/60'/0'/0/0/${addressIndex}`;
+  const account = hdNode.derivePath(derivationPath);
+  privkey = account.privateKey
+  // const ethPubKey = account.publicKey
+  const address = account.address
 
   code_el.innerHTML +=
-    "<span class='index'> " + derivationPath + "/" + addressIndex + " </span>"; // addressIndex rotation endless addressIndex++
-
-  var ethPubkey = libs.ethUtil.importPublic(key.keyPair.getPublicKeyBuffer());
-  var hexAddress = libs.ethUtil.publicToAddress(ethPubkey).toString("hex")
-  var checksumAddress = libs.ethUtil.toChecksumAddress(hexAddress);
-  address = libs.ethUtil.addHexPrefix(checksumAddress);
+    "<span class='index'> " + derivationPath + " </span>"; // addressIndex rotation endless addressIndex++
   code_el.innerHTML +=
     "<span class='address'> " + address + " </span>";
-
-  var hasPrivkey = !key.isNeutered();
-  privkey = "NA";
-  if (hasPrivkey) {
-    privkey = key.keyPair.toWIF()
-    privkey = libs.ethUtil.bufferToHex(key.keyPair.d.toBuffer(32))
-    privkey = privkey.replace(" ", "")
-    code_el.innerHTML +=
-      "<span class='privkey'> <br>" + privkey + " <br></span>";
-  }
+  code_el.innerHTML +=
+    "<span class='privkey'> <br>" + privkey + " <br></span>";
 
   playScore()
 }
@@ -134,17 +114,12 @@ function getMnemonicPhrase(entropy) {
     if (!hasStrongRandom()) {
       throw new Error("This browser does not support strong randomness");// TODO: catch error
     }
-    // get the amount of entropy to use
-    var numWords = 12;
-    var strength = (numWords / 3) * 32;
-    var buffer = new Uint8Array(strength / 8);
-    // create secure entropy
-    data = crypto.getRandomValues(buffer);
+    data = utils.randomBytes(16);
   }
   // show the words
   let words
   try {
-    words = mnemonicUtil.toMnemonic(data);
+    words = utils.entropyToMnemonic(data)
   } catch (e) {
     console.log({ e })
     window.location.hash = ""
@@ -204,7 +179,7 @@ function playScore() {
     dtx.msImageSmoothingEnabled = false;
     dtx.imageSmoothingEnabled = false;
 
-    dpi = window.devicePixelRatio;
+    const dpi = window.devicePixelRatio;
 
     //create a style object that returns width and height
     let style = {
@@ -236,8 +211,8 @@ function playScore() {
       height: sW,
     };
 
-    nW = dx - 22 * sW;
-    nH = dy - dy / 10 - sH;
+    // let nW = dx - 22 * sW;
+    // let nH = dy - dy / 10 - sH;
 
     dtx.fillStyle = "#000";
 
@@ -256,7 +231,7 @@ function playScore() {
     dtx.drawImage(img, 0, 0, width, height, 2 * sW, 0, sW, sH);
 
     dtx.lineWidth = 2;
-    i = index - 2;
+    let i = index - 2;
 
     const hex_to_color_and_multiplier_key = {
       "f": { color: "#333", multiplier: 0 },
@@ -360,33 +335,6 @@ function paddedPrivKey() {
   var str3 = "yyy";//hack 3 y after to make scrore disapear left
   return str2.concat(str1).concat(str3);
 }
-function calcBip32ExtendedKey(path) {
-  // Check there's a root key to derive from
-  if (!bip32RootKey) {
-    throw new Error("No root key"); // TODO: catch error
-  }
-  var extendedKey = bip32RootKey;
-  // Derive the key from the path
-  var pathBits = path.split("/");
-  for (var i = 0; i < pathBits.length; i++) {
-    var bit = pathBits[i];
-    var index = parseInt(bit);
-    if (isNaN(index)) {
-      continue;
-    }
-    var hardened = bit[bit.length - 1] == "'";
-    var isPriv = !extendedKey.isNeutered();
-    var invalidDerivationPath = hardened && !isPriv;
-    if (invalidDerivationPath) {
-      extendedKey = null;
-    } else if (hardened) {
-      extendedKey = extendedKey.deriveHardened(index);
-    } else {
-      extendedKey = extendedKey.derive(index);
-    }
-  }
-  return extendedKey;
-}
 const hexToBytes = (hextropy) => {
   var bytes = [];
   for (var c = 0; c < hextropy.length; c += 2) {
@@ -409,57 +357,4 @@ function uint8ArrayToHex(a) {
     s = s + h;
   }
   return s;
-}
-function findDerivationPathErrors(path) {
-  var maxDepth = 255;
-  var maxIndexValue = Math.pow(2, 31);
-  if (path[0] != "m") {
-    return "First character must be 'm'";
-  }
-  if (path.length > 1) {
-    if (path[1] != "/") {
-      return "Separator must be '/'";
-    }
-    var indexes = path.split("/");
-    if (indexes.length > maxDepth) {
-      return (
-        "Derivation depth is " +
-        indexes.length +
-        ", must be less than " +
-        maxDepth
-      );
-    }
-    for (var depth = 1; depth < indexes.length; depth++) {
-      var index = indexes[depth];
-      var invalidChars = index.replace(/^[0-9]+'?$/g, "");
-      if (invalidChars.length > 0) {
-        return (
-          "Invalid characters " + invalidChars + " found at depth " + depth
-        );
-      }
-      var indexValue = parseInt(index.replace("'", ""));
-      if (isNaN(depth)) {
-        return "Invalid number at depth " + depth;
-      }
-      if (indexValue > maxIndexValue) {
-        return (
-          "Value of " +
-          indexValue +
-          " at depth " +
-          depth +
-          " must be less than " +
-          maxIndexValue
-        );
-      }
-    }
-  }
-  // Check root key exists or else derivation path is useless!
-  if (!bip32RootKey) {
-    return "No root key";
-  }
-  return false;
-}
-function calcBip32RootKeyFromSeed(phrase, passphrase) {
-  seed = mnemonicUtil.toSeed(phrase, passphrase);
-  bip32RootKey = libs.bitcoin.HDNode.fromSeedHex(seed, network);
 }
