@@ -4,8 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx live-server --port=3000 --entry-file=index.html"
+    "dev": "npx webpack serve --mode development",
+    "build": "npx webpack --mode development",
+    "postinstall": "npx webpack --mode production"
   },
   "author": "Joan Heemskerk (@johee)",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bip39": "^3.1.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "html-webpack-plugin": "^5.5.3",
+    "license-webpack-plugin": "^4.0.2",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
 }
