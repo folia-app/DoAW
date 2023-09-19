@@ -1,6 +1,10 @@
 (function () {
   let snds = new Audio("bithex/0.mp3");
 
+  if (window.location.hash !== "" && window.location.hash !== "#") {
+    document.getElementsByTagName("body")[0].classList.add("has-entropy");
+    // get body
+  }
   let privkey, entropyHex, address, currentMnemonic, addressIndex = 0
 
   let seed, bip32RootKey, bip32ExtendedKey
@@ -9,8 +13,17 @@
   let code_el = document.getElementById("code");
   var splash = document.getElementById('parent')
 
-  document.addEventListener('click', clickFunction)
+  function custom(event) {
+    var el = document.getElementById("hov");
+    el.style.top = event.clientY + "px";
+    el.style.left = event.clientX + "px";
+  }
 
+  document.addEventListener('mousemove', custom);
+
+  // setTimeout(run, 2000) // TODO: use something like this for server
+
+  document.addEventListener('click', clickFunction)
   let clicked = false
   function clickFunction() {
     if (!clicked) {
@@ -39,7 +52,7 @@
     code.innerHTML = "";
     wdiv.innerHTML = "";
     currentMnemonic = getMnemonicPhrase(window.location.hash);
-
+    console.log(currentMnemonic)
     calcBip32RootKeyFromSeed(currentMnemonic)
     const derivationPath = "m/44'/60'/0'/0";
     var errorText = findDerivationPathErrors(derivationPath);

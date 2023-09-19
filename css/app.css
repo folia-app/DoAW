@@ -6,7 +6,8 @@ html {
   padding: 0px;
   background-color: #ccc;
   /* cursor: none; */
-  cursor: crosshair;
+  /* cursor: crosshair; */
+  cursor: none;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
@@ -19,6 +20,13 @@ html {
 }
 p.customfont {
   font-family: "zx-spectrum", Verdana, Tahoma;
+}
+
+#hov{
+  font-family: "zx-spectrum", Verdana, Tahoma;
+  display:block;
+  position:absolute;
+  font-size:20px;
 }
 .parent {
   position: absolute;
