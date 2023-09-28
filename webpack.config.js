@@ -17,12 +17,18 @@ module.exports = {
     // 'fs': 'fs',
     // 'window': 'window'
   },
+  watchOptions: {
+    ignored: /node_modules/,
+    poll: 1000,
+    aggregateTimeout: 300
+  },
   output: {
     publicPath: '',
     clean: true,
     libraryTarget: 'umd',
     globalObject: 'this',
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
+    library: 'r4awExports'
   },
   devServer: {
     // static: path.resolve(__dirname, "dist"),
@@ -63,6 +69,39 @@ module.exports = {
       filename: 'nft.html',
       inject: false,
       minify: false,
+      templateParameters: (compilation, assets, options) => {
+        // const fs = require('fs');
+        // const p5Content = fs.readFileSync('./public/p5.min.js', 'utf-8');
+        return {
+          compilation,
+          webpackConfig: options.webpackConfig,
+          assets,
+          options,
+          // fs,
+          // p5Content,
+        };
+      },
+    }),
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: 'R4AW',
+      metaDesc: 'R4AW',
+      template: path.resolve(__dirname, "src/gif.ejs"),
+      filename: 'gif.html',
+      inject: false,
+      minify: false,
+      templateParameters: (compilation, assets, options) => {
+        // const fs = require('fs');
+        // const p5Content = fs.readFileSync('./public/p5.min.js', 'utf-8');
+        return {
+          compilation,
+          webpackConfig: options.webpackConfig,
+          assets,
+          options,
+          // fs,
+          // p5Content,
+        };
+      },
     }),
     new CopyWebpackPlugin({
       patterns: [

@@ -12,43 +12,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <meta name="description" content="<%= compilation.options.plugins.find(plugin => plugin.constructor.name === 'HtmlWebpackPlugin').options.metaDesc %> "/>
   </head>
-  <body>
+  <body id="nft">
     <div id="popup">
       <p id="popupText"></p>
-    </div>
-    <div id="parent" class="parent">
-      <div id="splash" class="splash">R4aW<p>START</p>
-      </div>
     </div>
     <div id="code" class="code"></div>
     <canvas id="d"></canvas>
     <div id="wdiv"></div>
     <div id="index"></div>
+    <div id="debug"></div>
     <script defer>
       <%= compilation.assets['R4AW.js'].source() %>
     </script>
     <script defer>
-
-      if (window.location.hash !== "" && window.location.hash !== "#") {
+      window.isGif = true
+      if (window.location.hash == "" || window.location.hash == "#") {
+        alert("Missing ID, going back to index")
+        window.location = "/index.html";
+      } else {
         document.getElementsByTagName("body")[0].classList.add("has-entropy");
         // get body
       }
       const r4awExports = window.r4awExports
       console.log({r4awExports})
-
-      let clicked = false
-      document.addEventListener('click', clickFunction)
-      function clickFunction() {
-        if (! clicked) {
-          document.getElementById('parent').style.display = "none";
-          r4awExports.snds.play();
-          r4awExports.run();
-          clicked = true
-        } else {
-          console.log('posted message', r4awExports.entropyHex)
-          window.parent.postMessage(r4awExports.entropyHex, '*');
-        }
-      }
+      r4awExports.run(true);
     </script>
   </body>
 </html>

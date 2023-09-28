@@ -1,84 +1,25 @@
 import { utils } from 'ethers';
 
-let snds = new Audio("bithex/0.mp3");
+export const snds = new Audio("bithex/0.mp3");
 
-if (window.location.hash !== "" && window.location.hash !== "#") {
-  document.getElementsByTagName("body")[0].classList.add("has-entropy");
-  // get body
-}
-let privkey, entropyHex, address, currentMnemonic, addressIndex = 0, dpi
+export let addressIndex = 0, entropyHex
+let privkey, address, currentMnemonic, dpi
 
-let seed
 let code_el = document.getElementById("code");
-let splash = document.getElementById('parent')
-console.log("splash", splash)
-
-function custom(event) {
-  var el = document.getElementById("hov");
-  el.style.top = event.clientY + "px";
-  el.style.left = event.clientX + "px";
-}
-
-document.addEventListener('mousemove', custom);
-
-// setTimeout(run, 2000) // TODO: use something like this for server
-
-document.addEventListener('click', clickFunction)
-let clicked = false
-function clickFunction() {
-  if (!clicked) {
-    splash.style.display = "none";
-    snds.play();
-    run();
-    clicked = true
-  } else {
-    if (window.location.hash !== "" && window.location.hash !== "#") {
-      window.location.hash = ""
-      popdown()
-    } else {
-      window.location.hash = entropyHex
-      popup()
-    }
-  }
-}
-
-// populateIndex()
 
 let Draw
 const onResize = () => Draw && Draw()
 window.addEventListener("resize", onResize);
 
+
+
 let img = new Image(), imgLoaded = false
 img.src = "bitimg/00.png";
 img.onload = () => imgLoaded = true
-
-function popup() {
-  let popup = document.getElementById("popup");
-  popup.style.display = "block";
-  let popupText = document.getElementById("popupText");
-  popupText.innerHTML = "Connect Wallet to mint " + entropyHex;
-}
-function popdown() {
-  let popup = document.getElementById("popup");
-  popup.style.display = "none";
-}
-
-function populateIndex() {
-  let index = document.getElementById("index");
-  for (let i = 0; i < 10; i++) {
-    // append iframe to index
-    // let iframe = document.createElement("iframe");
-    // iframe.src = "/img/" + (Math.floor(Math.random() * 3) + 1) + ".png";
-    // iframe.className = "iframe";
-
-    let iframe = document.createElement("img");
-    iframe.src = "/img/" + (Math.floor(Math.random() * 3) + 1) + ".png";
-    index.appendChild(iframe);
-  }
-
-}
-
-function run() {
+var _isMuted = false
+export function run(isMuted = false) {
+  _isMuted = isMuted
+  console.log("run")
   code.innerHTML = "";
   wdiv.innerHTML = "";
   currentMnemonic = getMnemonicPhrase(window.location.hash);
@@ -87,7 +28,7 @@ function run() {
   const account = hdNode.derivePath(derivationPath);
   privkey = account.privateKey
   // const ethPubKey = account.publicKey
-  const address = account.address
+  address = account.address
 
   code_el.innerHTML +=
     "<span class='index'> " + derivationPath + " </span>"; // addressIndex rotation endless addressIndex++
@@ -142,34 +83,46 @@ function playScore() {
     cell.className = "cell";
     wdiv.appendChild(cell);
   }
-
   var sounds = [...paddedPrivKey()];
-  snds.src = "bithex/" + sounds[0] + ".mp3"; // TODO: preload these if there's delay on low speed network
-  snds.play();
-  let index = 0;
+  if (!_isMuted) {
+    snds.src = "bithex/" + sounds[0] + ".mp3"; // TODO: preload these if there's delay on low speed network
+    snds.play();
+  }
 
-  snds.onended = function () {
+  let index = 0;
+  const noSoundTimeoutLength = window.isGif ? 1000 : 200
+
+  const progress = function () {
     index++;
     if (index < sounds.length) {
-      snds.src = "bithex/" + sounds[index] + ".mp3";
-      snds.play();
+      if (!_isMuted) {
+        snds.src = "bithex/" + sounds[index] + ".mp3";
+        snds.play();
+      } else {
+        setTimeout(progress, noSoundTimeoutLength)
+      }
       Draw(index, sounds[index]);
     } else {
-      snds.pause();
+      if (!_isMuted) {
+        snds.pause();
+      }
       index = 0;
       if (window.location.hash.indexOf(entropyHex) > -1) {
         addressIndex++;
       }
-      run();
+      run(_isMuted);
     }
   }
 
   Draw = async function (index, hexc) {
     var Wstr = paddedPrivKey()
     var Nextstr = Wstr.slice(0, -2).concat(entropyHex);
-
     if (hexc !== "o" && hexc !== "x") {
-      document.body.style.backgroundColor = "#" + Nextstr.substring(index, index + 3);
+      let color = "#" + Nextstr.substring(index, index + 3);
+      if (hexc == "y") {
+        color = null
+      }
+      document.body.style.backgroundColor = color
     }
 
     let d = document.getElementById("d");
@@ -323,16 +276,31 @@ function playScore() {
       note.height
     );
   }
+
+
+  if (!_isMuted) {
+    snds.onended = progress
+  } else {
+    progress()
+  }
+
 }
 
 
 // helpers
+var yRepeat
 
 function paddedPrivKey() {
-  // TODO: Can be calculated to be the width of the screen so it's not empty on narrow screens
+  if (!yRepeat) {
+    var width = +getComputedStyle(d).getPropertyValue("width").slice(0, -2) * window.devicePixelRatio
+    var widthPerY = window.isGif ? 35 : 60
+    yRepeat = Math.ceil(width / widthPerY)
+    // document.getElementById("debug").innerHTML = `width is ${width}<br>window.devicePixelRatio is ${window.devicePixelRatio}<br> isGif = ${window.isGif}`
+    // console.log({ yRepeat })
+  }
   var str1 = privkey.replace("0x", "ox").toLowerCase();
-  var str2 = "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"; //hack 37 y before to make scrore come from right
-  var str3 = "yyy";//hack 3 y after to make scrore disapear left
+  var str2 = "y".repeat(yRepeat); //hack 37 y before to make scrore come from right
+  var str3 = "yyy"; //hack 3 y after to make scrore disapear left
   return str2.concat(str1).concat(str3);
 }
 const hexToBytes = (hextropy) => {

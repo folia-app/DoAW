@@ -6,16 +6,19 @@
   "scripts": {
     "dev": "npx webpack serve --mode development",
     "build": "npx webpack --mode development",
-    "postinstall": "npx webpack --mode production"
+    "postinstall": "npx webpack --mode production",
+    "server": "npx live-server --port=8080 dist",
+    "webgif": "webgif -u http://localhost:8081/nft.html#455555f9423409ac3dd472076bf89e6f -d 10 -o ./gifTest.gif -f 60"
   },
-  "author": "Joan Heemskerk (@johee)",
-  "license": "ISC",
+  "author": "Joan Heemskerk (@johee) and Billy Rennekamp (@okwme)",
+  "license": "CC-NC-4.0",
   "dependencies": {
     "copy-webpack-plugin": "^11.0.0",
     "ethers": "5.7",
     "html-webpack-plugin": "^5.5.3",
     "license-webpack-plugin": "^4.0.2",
     "url-loader": "^4.1.1",
+    "webgif": "^1.1.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"

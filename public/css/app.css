@@ -6,13 +6,18 @@ html {
   padding: 0px;
   background-color: #ccc;
   /* cursor: none; */
-  /* cursor: crosshair; */
-  cursor: none;
+  cursor: crosshair;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   /* overflow: hidden; */
+}
+#debug {
+  position: fixed;
+  left:50%;
+  top:50%;
+  z-index:999;
 }
 @font-face {
   font-family: "zx-spectrum";
