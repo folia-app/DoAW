@@ -8,7 +8,8 @@
     "build": "npx webpack --mode development",
     "postinstall": "npx webpack --mode production",
     "server": "npx live-server --port=8080 dist",
-    "webgif": "webgif -u http://localhost:8081/nft.html#455555f9423409ac3dd472076bf89e6f -d 10 -o ./gifTest.gif -f 60"
+    "webgif": "webgif -u http://localhost:8081/nft.html#455555f9423409ac3dd472076bf89e6f -d 10 -o ./gifTest.gif -f 60",
+    "optimize": "npx gifsicle -O2 -b --colors 256 -o foo.gif --resize-width 512"
   },
   "author": "Joan Heemskerk (@johee) and Billy Rennekamp (@okwme)",
   "license": "CC-NC-4.0",
