@@ -116,9 +116,9 @@ function playScore() {
 
   Draw = async function (index, hexc) {
     var Wstr = paddedPrivKey()
-    var Nextstr = Wstr.slice(0, -2).concat(entropyHex);
+    var Nextstr = Wstr.slice(0, -2).concat(entropyHex); 
     if (hexc !== "o" && hexc !== "x") {
-      let color = "#" + Nextstr.substring(index, index + 3);
+      let color = "#" + Nextstr.substring(index, index + 3); //last 3 same color because of y Nextstr doestn't work
       if (hexc == "y") {
         color = null
       }
@@ -258,7 +258,7 @@ function playScore() {
     const dtx_color = hex_to_color_and_multiplier_key[hexc].color
     const dtx_note_y = note.y + note.height * hex_to_color_and_multiplier_key[hexc].multiplier;
 
-    dtx.strokeStyle = dtx_color
+    // dtx.strokeStyle = dtx_color
     dtx.fillStyle = dtx_color;
     dtx.fillRect(
       note.x,
@@ -266,15 +266,15 @@ function playScore() {
       note.width,
       note.height
     );
-    if (hexc == "0") {
-      dtx.lineWidth = 1; // TODO: confirm the lineWidth doesn't change anywhere else? Does it need to be reset for others?
-    }
-    dtx.strokeRect(
-      note.x,
-      dtx_note_y,
-      note.width,
-      note.height
-    );
+    // if (hexc == "0") {
+    //   dtx.lineWidth = 1; // TODO: confirm the lineWidth doesn't change anywhere else? Does it need to be reset for others?
+    // }
+    // dtx.strokeRect(
+    //   note.x,
+    //   dtx_note_y,
+    //   note.width,
+    //   note.height
+    // );
   }
 
 
