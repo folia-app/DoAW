@@ -1,5 +1,5 @@
 const { ethers } = require("ethers");
-const contracts = require('r4aw-contracts')
+// const contracts = require('doaw-contracts')
 
 
 function getNetwork() {

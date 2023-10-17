@@ -11,7 +11,7 @@ const path = require("path");
 module.exports = {
   mode: "production",
   entry: {
-    R4AW: [path.resolve(__dirname, "src", "r4aw.js")],
+    DoAW: [path.resolve(__dirname, "src", "doaw.js")],
   },
   externals: {
     // 'fs': 'fs',
@@ -28,7 +28,7 @@ module.exports = {
     libraryTarget: 'umd',
     globalObject: 'this',
     path: path.resolve(__dirname, "dist"),
-    library: 'r4awExports'
+    library: 'doawExports'
   },
   devServer: {
     // static: path.resolve(__dirname, "dist"),

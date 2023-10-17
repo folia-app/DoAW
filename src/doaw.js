@@ -11,7 +11,10 @@ let Draw
 const onResize = () => Draw && Draw()
 window.addEventListener("resize", onResize);
 
-
+let paused = false
+export function pause() {
+  paused = !paused
+}
 
 let img = new Image(), imgLoaded = false
 img.src = "bitimg/00.png";
@@ -93,6 +96,10 @@ function playScore() {
   const noSoundTimeoutLength = window.isGif ? 1000 : 200
 
   const progress = function () {
+    if (paused) {
+      setTimeout(progress, noSoundTimeoutLength)
+      return
+    }
     index++;
     if (index < sounds.length) {
       if (!_isMuted) {
@@ -116,9 +123,14 @@ function playScore() {
 
   Draw = async function (index, hexc) {
     var Wstr = paddedPrivKey()
-    var Nextstr = Wstr.slice(0, -2).concat(entropyHex); 
+    var Nextstr = Wstr.slice(0, -2)
     if (hexc !== "o" && hexc !== "x") {
-      let color = "#" + Nextstr.substring(index, index + 3); //last 3 same color because of y Nextstr doestn't work
+      let color = "#" + Nextstr.substring(index, index + 3);
+      // don't let y be part of a color code
+      if (color.indexOf("y") > -1) {
+        color = color.replace(/y/g, "").replace(/x/g, "").replace(/o/g, "")
+        color = color + entropyHex.substring(0, 0 + 4 - color.length)
+      }
       if (hexc == "y") {
         color = null
       }
@@ -294,14 +306,15 @@ function paddedPrivKey() {
   if (!yRepeat) {
     var width = +getComputedStyle(d).getPropertyValue("width").slice(0, -2) * window.devicePixelRatio
     var widthPerY = window.isGif ? 35 : 60
-    yRepeat = window.isGif ? 0 : Math.ceil(width / widthPerY)
+    yRepeat = /*window.isGif ? 0 :*/ Math.ceil(width / widthPerY)
     // document.getElementById("debug").innerHTML = `width is ${width}<br>window.devicePixelRatio is ${window.devicePixelRatio}<br> isGif = ${window.isGif}`
     // console.log({ yRepeat })
   }
   var str1 = privkey.replace("0x", "ox").toLowerCase();
-  str1 = str1 + str1
+  // str1 += entropyHex.substr(0, 3)
+  str1 = /*window.isGif ? str1 + str1 :*/ str1
   var str2 = "y".repeat(yRepeat); //hack 37 y before to make scrore come from right
-  var str3 = window.isGif ? "" : "yyy"; //hack 3 y after to make scrore disapear left
+  var str3 = /*window.isGif ? "" : */"yyy"; //hack 3 y after to make scrore disapear left
   return str2.concat(str1).concat(str3);
 }
 const hexToBytes = (hextropy) => {

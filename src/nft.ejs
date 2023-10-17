@@ -22,7 +22,7 @@
     <div id="index"></div>
     <div id="debug"></div>
     <script defer>
-      <%= compilation.assets['R4AW.js'].source() %>
+      <%= compilation.assets['DoAW.js'].source() %>
     </script>
     <script defer>
       if (window.location.hash == "" || window.location.hash == "#") {
@@ -32,9 +32,10 @@
         document.getElementsByTagName("body")[0].classList.add("has-entropy");
         // get body
       }
-      const r4awExports = window.r4awExports
-      console.log({r4awExports})
-      r4awExports.run(true);
+      const doawExports = window.doawExports
+      console.log({doawExports})
+      doawExports.run(true);
+      document.getElementsByTagName("body")[0].addEventListener('click', doawExports.pause)
     </script>
   </body>
 </html>

@@ -25,7 +25,7 @@
     <div id="wdiv"></div>
     <div id="index"></div>
     <script defer>
-      <%= compilation.assets['R4AW.js'].source() %>
+      <%= compilation.assets['DoAW.js'].source() %>
     </script>
     <script defer>
 
@@ -33,20 +33,21 @@
         document.getElementsByTagName("body")[0].classList.add("has-entropy");
         // get body
       }
-      const r4awExports = window.r4awExports
-      console.log({r4awExports})
+      const doawExports = window.doawExports
+      console.log({doawExports})
 
       let clicked = false
       document.addEventListener('click', clickFunction)
       function clickFunction() {
         if (! clicked) {
           document.getElementById('parent').style.display = "none";
-          r4awExports.snds.play();
-          r4awExports.run();
+          doawExports.snds.play();
+          doawExports.run();
           clicked = true
         } else {
-          console.log('posted message', r4awExports.entropyHex)
-          window.parent.postMessage(r4awExports.entropyHex, '*');
+          doawExports.pause()
+          console.log('posted message', doawExports.entropyHex)
+          window.parent.postMessage(doawExports.entropyHex, '*');
         }
       }
     </script>
