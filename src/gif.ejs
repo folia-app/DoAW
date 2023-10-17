@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="utf-8"/>
+    <title>
+      <%= compilation.options.plugins.find(plugin => plugin.constructor.name === 'HtmlWebpackPlugin').options.title  %>
+    </title>
+
+    <!-- 7-2023 -->
+
+    <link rel="stylesheet" href="css/app.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="<%= compilation.options.plugins.find(plugin => plugin.constructor.name === 'HtmlWebpackPlugin').options.metaDesc %> "/>
+  </head>
+  <body id="nft">
+    <div id="popup">
+      <p id="popupText"></p>
+    </div>
+    <div id="code" class="code"></div>
+    <canvas id="d"></canvas>
+    <div id="wdiv"></div>
+    <div id="index"></div>
+    <div id="debug"></div>
+    <script defer>
+      <%= compilation.assets['DoAW.js'].source() %>
+    </script>
+    <script defer>
+      window.isGif = true
+      if (window.location.hash == "" || window.location.hash == "#") {
+        alert("Missing ID, going back to index")
+        window.location = "/index.html";
+      } else {
+        document.getElementsByTagName("body")[0].classList.add("has-entropy");
+        // get body
+      }
+      const doawExports = window.doawExports
+      console.log({doawExports})
+      doawExports.run(true);
+    </script>
+  </body>
+</html>
