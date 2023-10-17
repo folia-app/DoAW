@@ -89,7 +89,7 @@ function playScore() {
     snds.play();
   }
 
-  let index = 0;
+  let index = window.isGif ? 1 : 0;
   const noSoundTimeoutLength = window.isGif ? 1000 : 200
 
   const progress = function () {
@@ -294,13 +294,14 @@ function paddedPrivKey() {
   if (!yRepeat) {
     var width = +getComputedStyle(d).getPropertyValue("width").slice(0, -2) * window.devicePixelRatio
     var widthPerY = window.isGif ? 35 : 60
-    yRepeat = Math.ceil(width / widthPerY)
+    yRepeat = window.isGif ? 0 : Math.ceil(width / widthPerY)
     // document.getElementById("debug").innerHTML = `width is ${width}<br>window.devicePixelRatio is ${window.devicePixelRatio}<br> isGif = ${window.isGif}`
     // console.log({ yRepeat })
   }
   var str1 = privkey.replace("0x", "ox").toLowerCase();
+  str1 = str1 + str1
   var str2 = "y".repeat(yRepeat); //hack 37 y before to make scrore come from right
-  var str3 = "yyy"; //hack 3 y after to make scrore disapear left
+  var str3 = window.isGif ? "" : "yyy"; //hack 3 y after to make scrore disapear left
   return str2.concat(str1).concat(str3);
 }
 const hexToBytes = (hextropy) => {
