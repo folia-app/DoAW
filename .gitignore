@@ -23,3 +23,7 @@ out/
 *.swp
 .DS_Store
 Thumbs.db
+
+*.html
+*.gif
+*.zip
