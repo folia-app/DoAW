@@ -42,8 +42,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       hash: true,
-      title: 'R4AW',
-      metaDesc: 'R4AW',
+      title: 'DoAW',
+      metaDesc: 'DoAW',
       template: path.resolve(__dirname, "src/index.ejs"),
       filename: 'index.html',
       inject: false,
@@ -63,8 +63,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       hash: true,
-      title: 'R4AW',
-      metaDesc: 'R4AW',
+      title: 'DoAW',
+      metaDesc: 'DoAW',
       template: path.resolve(__dirname, "src/nft.ejs"),
       filename: 'nft.html',
       inject: false,
@@ -84,8 +84,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       hash: true,
-      title: 'R4AW',
-      metaDesc: 'R4AW',
+      title: 'DoAW',
+      metaDesc: 'DoAW',
       template: path.resolve(__dirname, "src/gif.ejs"),
       filename: 'gif.html',
       inject: false,
