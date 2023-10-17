@@ -27,3 +27,10 @@ Thumbs.db
 *.html
 *.gif
 *.zip
+
+#Hardhat files
+cache
+artifacts
+.DS_Store
+../.DS_Store
+solc-output/
