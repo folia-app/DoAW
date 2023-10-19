@@ -16,6 +16,11 @@
     <div id="popup">
       <p id="popupText"></p>
     </div>
+    <div id="parent" class="parent">
+      <div id="splash" class="splash">DoAW<p>START</p>
+      </div>
+      <div id="wdivnft"></div>
+    </div>
     <div id="code" class="code"></div>
     <canvas id="d"></canvas>
     <div id="wdiv"></div>
@@ -32,10 +37,29 @@
         document.getElementsByTagName("body")[0].classList.add("has-entropy");
         // get body
       }
+      //console.log(window.location.hash.substring(0, 7))
+      document.getElementById("splash").style.backgroundColor = window.location.hash.substring(0, 7);
+      ///
+    ////mnemonic phrase splash nft should be generated before run in background !!!
+      
+      let clicked = false
+      document.addEventListener('click', clickFunction)
+      function clickFunction() {
+        if (! clicked) {
+          document.getElementById('parent').style.display = "none";
+          const doawExports = window.doawExports
+     //!!!nft neeeds to play sound ! maybe only mute in grid on site
+      doawExports.snds.play(true);
+          clicked = true
+        } else {
+        }
+      }
       const doawExports = window.doawExports
       console.log({doawExports})
       doawExports.run(true);
-      document.getElementsByTagName("body")[0].addEventListener('click', doawExports.pause)
+        //!!!nft neeeds to play sound ! maybe only mute in grid on site
+      doawExports.snds.play(true);
+      //document.getElementsByTagName("body")[0].addEventListener('click', doawExports.pause)
     </script>
   </body>
 </html>

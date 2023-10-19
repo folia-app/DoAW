@@ -128,7 +128,7 @@ z-index doesnt work now because of click function */
   padding: 1em 1.5em;
   display: block;
   word-wrap: break-word;
-  z-index: 3;
+  z-index: 1;
 }
 
 
@@ -138,15 +138,29 @@ z-index doesnt work now because of click function */
   left: 0%;
   width: calc(100% - 20px);
   height: 15%;
-  /* top: 5%; */
   text-transform: uppercase;
-  /* font-family: Menlo, Monaco, "Droid Sans Mono", Consolas, monospace; */
   font-family: "zx-spectrum", monospace;
-  /* letter-spacing: 0.2rem; */
   font-size: 1vw;
   margin: 10px;
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto;
+  grid-gap: 1vh;
+  z-index: 1;
+}
+
+#wdivnft {
+  position: absolute;
+  left: 10%;
+  width: 80%;
+  height: 15%;
+  bottom:10%;
+  text-transform: uppercase;
+  font-family: "zx-spectrum", monospace;
+  /* letter-spacing: .2rem; */
+  font-size: 2vw;
+  margin: 0px;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
   grid-gap: 1vh;
   z-index: 3;
 }
