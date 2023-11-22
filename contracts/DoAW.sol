@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "./Metadata.sol";
-import "erc721a/contracts/extensions/ERC721AQueryable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -23,22 +23,22 @@ Presented by Folia.app
 /// @author @okwme
 /// @dev ERC721A contract for DoAW. External upgradeable metadata.
 
-contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
+contract DoAW is ERC721Enumerable, Ownable, ERC2981, ReentrancyGuard {
   bool public paused = false;
-  uint256 public constant MAX_SUPPLY = 486;
-  uint256 public price = 0.055555555555555555 ether;
+  uint256 public constant MAX_SUPPLY = 99; // TODO: change this before mainnet
+  uint256 public price = 0.001 ether; // TODO: change this before mainnet
   address public metadata;
   address public splitter;
-  uint256 public startdate = 1699984800; // Tue Nov 14 2023 18:00:00 GMT+0000 (8pm CEST Berlin, 7pm London, 2pm NYC, 11am LA)
-  uint256 public premint = 1699974000; // Tue Nov 14 2023 15:00:00 GMT+0000 (5pm CEST Berlin, 4pm London, 11am NYC, 8am LA)
-  bytes32 public merkleRoot = 0xf78f6412ef155d654600b79b83071b194c4c94f1212bb3feea35d4a290c3d0c9;
+  uint256 public startdate = 1699984800; // Tue Nov 14 2023 18:00:00 GMT+0000 (8pm CEST Berlin, 7pm London, 2pm NYC, 11am LA) // TODO: change this before mainnet
+  uint256 public premint = 1699974000; // Tue Nov 14 2023 15:00:00 GMT+0000 (5pm CEST Berlin, 4pm London, 11am NYC, 8am LA) // TODO: change this before mainnet
+  bytes32 public merkleRoot = 0xf78f6412ef155d654600b79b83071b194c4c94f1212bb3feea35d4a290c3d0c9; // TODO: change this before mainnet
 
   event EthMoved(address indexed to, bool indexed success, bytes returnData, uint256 amount);
 
-  constructor(address metadata_, address splitter_) ERC721A("DoAW", "DoAW") {
+  constructor(address metadata_, address splitter_) ERC721("DoAW", "DoAW") {
     metadata = metadata_;
     splitter = splitter_; // splitter doesn't need to be checked because it's checked in _setDefaultRoyalty
-    _setDefaultRoyalty(splitter, 1000); // 10%
+    _setDefaultRoyalty(splitter, 850); // 8.5%
   }
 
   /// @dev Allows minting by sending directly to the contract.
@@ -51,16 +51,10 @@ contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
     mint();
   }
 
-  /// @dev Overwrites the _startTokenId function from ERC721A so that the first token id is 1
-  /// @return uint256 the id of the first token
-  function _startTokenId() internal view virtual override(ERC721A) returns (uint256) {
-    return 1;
-  }
-
   /// @dev overwrites the tokenURI function from ERC721
   /// @param id the id of the NFT
   /// @return string the URI of the NFT
-  function tokenURI(uint256 id) public view override(ERC721A, IERC721A) returns (string memory) {
+  function tokenURI(uint256 id) public view override(ERC721) returns (string memory) {
     return Metadata(metadata).getMetadata(id);
   }
 
@@ -78,7 +72,7 @@ contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
   function mintAllowList(uint256 quantity, bytes32[] calldata _proof) external payable {
     require(allowListed(msg.sender, _proof), "You are not on the allowlist");
     require(!paused && block.timestamp >= premint, "Premint not started");
-    internalMint(msg.sender, quantity);
+    internalMint(msg.sender, quantity, makeEntropy(quantity));
   }
 
   /// @dev mint token with default settings
@@ -103,14 +97,52 @@ contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
   /// @param quantity the quantity of tokens to mint
   function mint(address recipient, uint256 quantity) public payable {
     require(!paused && block.timestamp >= startdate, "PAUSED");
-    internalMint(recipient, quantity);
+    internalMint(recipient, quantity, makeEntropy(quantity));
+  }
+
+  /**
+   * @dev Generates an array of random numbers based on the given quantity.
+   * @param quantity The number of random numbers to generate.
+   * @return entropy An array of random numbers.
+   */
+  function makeEntropy(uint256 quantity) public view returns (uint256[] memory entropy) {
+    entropy = new uint256[](quantity); // Initialize the entropy array with the specified quantity
+    for (uint i = 0; i < quantity; i++) {
+      entropy[i] = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, i)));
+    }
+    return entropy;
+  }
+
+  /**
+   * @dev Mint new tokens and distribute them to the specified recipient.
+   * @param recipient The address of the recipient to receive the minted tokens.
+   * @param quantity The number of tokens to mint.
+   * @param entropy An array of entropy values used for minting.
+   * @notice This function can only be called when the contract is not paused and after the start date.
+   */
+  function mint(address recipient, uint256 quantity, uint256[] memory entropy) public payable {
+    require(!paused && block.timestamp >= startdate, "PAUSED");
+    internalMint(recipient, quantity, entropy);
+  }
+
+  /**
+   * @dev Mint new tokens with a single entropy value and distribute them to the specified recipient.
+   * @param recipient The address of the recipient to receive the minted tokens.
+   * @param entropy The entropy value used for minting.
+   * @notice This function can only be called when the contract is not paused and after the start date.
+   */
+  function mintWithEntropy(address recipient, uint256 entropy) public payable {
+    uint256[] memory entropyArray = new uint256[](1);
+    entropyArray[0] = entropy;
+    mint(recipient, 1, entropyArray);
   }
 
   /// @dev mint tokens with rcipient and quantity as parameters
   /// @param recipient the recipient of the NFT
   /// @param quantity the quantity of tokens to mint
-  function internalMint(address recipient, uint256 quantity) internal nonReentrant {
+  function internalMint(address recipient, uint256 quantity, uint256[] memory entropy) internal nonReentrant {
     require(msg.value >= price * quantity, "WRONG PRICE");
+    require(entropy.length == quantity, "ENTROPY LENGTH DOESN'T MATCH QUANTITY");
     require(quantity == 1 || quantity == 3 || quantity == 5, "CAN'T MINT BESIDES QUANTITY OF 1, 3 OR 5");
     if (totalSupply() + quantity > MAX_SUPPLY) {
       quantity = MAX_SUPPLY - totalSupply(); // This will throw an error if the amount is negative
@@ -121,8 +153,9 @@ contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
     uint256 payment = quantity * price;
     (bool sent, bytes memory data) = splitter.call{value: payment}("");
     emit EthMoved(splitter, sent, data, payment);
-
-    _safeMint(recipient, quantity);
+    for (uint i = 0; i < quantity; i++) {
+      _safeMint(recipient, entropy[i]);
+    }
     // call this after _safeMint so totalSupply updates before a re-entry mintcould be called
     // UPDATE: re-entry no longer possible with reentrancy guard
     if (payment < msg.value) {
@@ -134,10 +167,16 @@ contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
   /// @dev only the owner can mint without paying
   /// @param recipient the recipient of the NFT
   /// @param quantity the quantity of tokens to mint
-  function adminMint(address recipient, uint256 quantity) public payable onlyOwner {
+  function adminMint(address recipient, uint256 quantity, uint256[] memory entropy) public payable onlyOwner {
     (bool sent, bytes memory data) = splitter.call{value: msg.value}("");
     emit EthMoved(splitter, sent, data, msg.value);
-    _safeMint(recipient, quantity);
+    for (uint i = 0; i < quantity; i++) {
+      _safeMint(recipient, entropy[i]);
+    }
+  }
+
+  function adminMint(address recipient, uint256 quantity) public payable onlyOwner {
+    adminMint(recipient, quantity, makeEntropy(quantity));
   }
 
   /// @dev set the metadata address as called by the owner
@@ -191,9 +230,11 @@ contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
     _setDefaultRoyalty(royaltyReceiver, royaltyPercentage);
   }
 
-  /// @dev if mint fails to send eth to splitter, admin can recover
-  // This should not be necessary but Berlin hardfork broke split before so this
-  // is extra precaution.
+  /**
+   * @dev If mint fails to send ETH to splitter, admin can recover the payment.
+   * This function is an extra precaution in case the split function breaks due to a hardfork.
+   * @param _to The address to which the recovered ETH should be sent.
+   */
   function recoverUnsuccessfulMintPayment(address payable _to) public onlyOwner {
     uint256 amount = address(this).balance;
     (bool sent, bytes memory data) = _to.call{value: amount}("");
@@ -209,7 +250,7 @@ contract DoAW is ERC721AQueryable, Ownable, ERC2981, ReentrancyGuard {
   /// @notice ERC2981, ERC721A, IERC721A are overridden to support multiple interfaces
   function supportsInterface(
     bytes4 interfaceId
-  ) public view virtual override(ERC2981, ERC721A, IERC721A) returns (bool) {
+  ) public view virtual override(ERC2981, ERC721Enumerable) returns (bool) {
     return
       interfaceId == type(IERC721).interfaceId ||
       interfaceId == type(IERC721Metadata).interfaceId ||

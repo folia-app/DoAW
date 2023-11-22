@@ -4,9 +4,9 @@ const hre = require("hardhat");
 const path = require("node:path");
 const fs = require("fs").promises;
 
-const correctPrice = ethers.utils.parseEther("0.055555555555555555");
-const splitterAddress = '0x69Bff8f9292e3D2b436A66D9F2226986aB16ABCF'
-const maxSupply = 486;
+const correctPrice = ethers.utils.parseEther("0.001"); // TODO: change before mainnet 
+const splitterAddress = '0x69Bff8f9292e3D2b436A66D9F2226986aB16ABCF' // TODO: change before mainnet
+const maxSupply = 99; // TODO: change before mainnet
 
 const testJson = (tJson) => {
   try {

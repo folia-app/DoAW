@@ -92,7 +92,7 @@ describe("DoAW Tests", function () {
       { name: "ERC165", id: "0x01ffc9a7", supported: true },
       { name: "ERC721", id: "0x80ac58cd", supported: true },
       { name: "ERC721Metadata", id: "0x5b5e139f", supported: true },
-      { name: "ERC721Enumerable", id: "0x780e9d63", supported: false },
+      { name: "ERC721Enumerable", id: "0x780e9d63", supported: true },
       { name: "ERC2981", id: "0x2a55205a", supported: true },
       { name: "ERC20", id: "0x36372b07", supported: false },
     ]
@@ -149,7 +149,7 @@ describe("DoAW Tests", function () {
   it("fails to adminMint when not owner", async function () {
     const [owner, addr1, addr2, addr3, addr4] = await ethers.getSigners();
     const { doaw } = await deployContracts();
-    await expect(doaw.connect(addr3).adminMint(addr3.address, 1))
+    await expect(doaw.connect(addr3)['adminMint(address,uint256)'](addr3.address, 1))
       .to.be.revertedWith("Ownable: caller is not the owner");
   });
 
@@ -167,7 +167,8 @@ describe("DoAW Tests", function () {
     await doaw.setPause(false);
     await doaw.setStartdate(0)
     await doaw.connect(addr3)['mint()']({ value: correctPrice });
-    expect(await doaw.ownerOf(1)).to.equal(addr3.address);
+    const tokenId = await doaw.tokenByIndex(0);
+    expect(await doaw.ownerOf(tokenId)).to.equal(addr3.address);
     var splitterBalance = await ethers.provider.getBalance(splitterAddress);
     expect(splitterBalance == correctPrice);
   });
@@ -181,8 +182,8 @@ describe("DoAW Tests", function () {
     const splitter = await doaw.splitter();
     const royaltyInfo = await doaw.royaltyInfo(1, correctPrice);
 
-    // royalty amount is 10% of the correctPrice
-    const royaltyAmount = correctPrice.div(10);
+    // royalty amount is 8.5% of the correctPrice
+    const royaltyAmount = correctPrice.mul(850).div(10000);
 
     expect(royaltyInfo[0]).to.equal(splitter);
     expect(royaltyInfo[1]).to.equal(royaltyAmount);
@@ -214,15 +215,22 @@ describe("DoAW Tests", function () {
   it("succeeds to mint", async function () {
     const [owner] = await ethers.getSigners();
     const { doaw } = await deployContracts();
+
+    const tomorrowInUnix = Math.floor(Date.now() / 1000) + 86400
+    await doaw.setStartdate(tomorrowInUnix)
+
     await expect(doaw['mint()']({ value: correctPrice }))
       .to.emit(doaw, "Transfer")
       .to.be.revertedWith("PAUSED")
 
     await doaw.setPause(false);
     await doaw.setStartdate(0)
-    await expect(doaw['mint()']({ value: correctPrice }))
+    const tx = doaw['mint()']({ value: correctPrice })
+    await tx
+    const tokenId = await doaw.tokenByIndex(0);
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, owner.address, 1)
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenId)
   })
 
   it("succeeds to mint with fallback method", async function () {
@@ -233,9 +241,12 @@ describe("DoAW Tests", function () {
 
     const correctPrice = await doaw.price()
     // send ether to an address
-    await expect(addr2.sendTransaction({ to: doaw.address, value: correctPrice }))
+    const tx = addr2.sendTransaction({ to: doaw.address, value: correctPrice })
+    await tx
+    const tokenId = await doaw.tokenByIndex(0);
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, addr2.address, 1)
+      .withArgs(ethers.constants.AddressZero, addr2.address, tokenId)
 
     const balance = await doaw.balanceOf(addr2.address);
     expect(balance).to.equal(1);
@@ -246,40 +257,58 @@ describe("DoAW Tests", function () {
   it("succeeds to mint with explicit recipient", async function () {
     const [owner, addr1] = await ethers.getSigners();
     const { doaw } = await deployContracts();
+    const tomorrowInUnix = Math.floor(Date.now() / 1000) + 86400
+    await doaw.setStartdate(tomorrowInUnix)
+
     await expect(doaw['mint(address)'](addr1.address, { value: correctPrice }))
       .to.be.revertedWith("PAUSED")
 
     await doaw.setPause(false);
     await doaw.setStartdate(0)
-    await expect(doaw['mint(address)'](addr1.address, { value: correctPrice }))
+    const tx = doaw['mint(address)'](addr1.address, { value: correctPrice })
+    await tx
+    const tokenId = await doaw.tokenByIndex(0);
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, addr1.address, 1)
+      .withArgs(ethers.constants.AddressZero, addr1.address, tokenId)
   })
 
   it("succeeds to mint with explicit quantity", async function () {
     const [owner, addr1] = await ethers.getSigners();
     const { doaw } = await deployContracts();
+    const tomorrowInUnix = Math.floor(Date.now() / 1000) + 86400
+    await doaw.setStartdate(tomorrowInUnix)
     await expect(doaw.connect(addr1)['mint(uint256)'](1, { value: correctPrice }))
       .to.be.revertedWith("PAUSED")
 
     await doaw.setPause(false);
     await doaw.setStartdate(0)
-    await expect(doaw.connect(addr1)['mint(uint256)'](1, { value: correctPrice }))
+    const tx = doaw.connect(addr1)['mint(uint256)'](1, { value: correctPrice })
+    await tx
+    const tokenId = await doaw.tokenByIndex(0);
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, addr1.address, 1)
+      .withArgs(ethers.constants.AddressZero, addr1.address, tokenId)
   })
 
   it("succeeds to mint with explicit recipient and quantity", async function () {
     const [owner, addr1] = await ethers.getSigners();
     const { doaw } = await deployContracts();
+    const tomorrowInUnix = Math.floor(Date.now() / 1000) + 86400
+    await doaw.setStartdate(tomorrowInUnix)
+
     await expect(doaw['mint(address,uint256)'](addr1.address, 1, { value: correctPrice }))
       .to.be.revertedWith("PAUSED")
 
     await doaw.setPause(false);
     await doaw.setStartdate(0)
-    await expect(doaw['mint(address,uint256)'](addr1.address, 1, { value: correctPrice }))
+    const tx = doaw['mint(address,uint256)'](addr1.address, 1, { value: correctPrice })
+    await tx
+    const tokenId = await doaw.tokenByIndex(0);
+
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, addr1.address, 1)
+      .withArgs(ethers.constants.AddressZero, addr1.address, tokenId)
   })
 
   it("succeeds to batch mint", async function () {
@@ -287,29 +316,49 @@ describe("DoAW Tests", function () {
     const { doaw } = await deployContracts();
     await doaw.setPause(false);
     await doaw.setStartdate(0)
-    await expect(doaw['mint(uint256)'](5, { value: correctPrice.mul(5) }))
+    var tx = doaw['mint(uint256)'](5, { value: correctPrice.mul(5) })
+    await tx
+    let tokenIds = []
+    for (let i = 0; i < 5; i++) {
+      tokenIds.push(await doaw.tokenByIndex(i));
+    }
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, owner.address, 1)
-      .withArgs(ethers.constants.AddressZero, owner.address, 2)
-      .withArgs(ethers.constants.AddressZero, owner.address, 3)
-      .withArgs(ethers.constants.AddressZero, owner.address, 4)
-      .withArgs(ethers.constants.AddressZero, owner.address, 5)
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[0])
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[1])
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[2])
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[3])
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[4])
 
+    tx = doaw.connect(addr2)['mint(uint256)'](3, { value: correctPrice.mul(3) })
+    await tx
 
-    await expect(doaw.connect(addr2)['mint(uint256)'](3, { value: correctPrice.mul(3) }))
+    for (let i = 5; i < 5 + 3; i++) {
+      tokenIds.push(await doaw.tokenByIndex(i));
+    }
+
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, addr2.address, 6)
-      .withArgs(ethers.constants.AddressZero, addr2.address, 7)
-      .withArgs(ethers.constants.AddressZero, addr2.address, 8)
+      .withArgs(ethers.constants.AddressZero, addr2.address, tokenIds[5])
+      .withArgs(ethers.constants.AddressZero, addr2.address, tokenIds[6])
+      .withArgs(ethers.constants.AddressZero, addr2.address, tokenIds[7])
 
     await expect(doaw['mint(uint256)'](2, { value: correctPrice.mul(2) }))
       .to.be.revertedWith("CAN'T MINT BESIDES QUANTITY OF 1, 3 OR 5")
 
-    await expect(doaw['mint(uint256)'](3, { value: correctPrice.mul(5) }))
+
+    tx = doaw['mint(uint256)'](3, { value: correctPrice.mul(5) })
+    await tx
+
+    for (let i = 8; i < 8 + 3; i++) {
+      tokenIds.push(await doaw.tokenByIndex(i));
+    }
+
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, owner.address, 9)
-      .withArgs(ethers.constants.AddressZero, owner.address, 10)
-      .withArgs(ethers.constants.AddressZero, owner.address, 11)
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[8])
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[9])
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenIds[10])
 
     await expect(doaw['mint(uint256)'](5, { value: correctPrice.mul(3) }))
       .to.be.revertedWith("WRONG PRICE")
@@ -329,12 +378,19 @@ describe("DoAW Tests", function () {
     const { doaw } = await deployContracts();
     await doaw.setPause(false)
     await doaw.setStartdate(0)
-    await expect(doaw['mint()']({ value: correctPrice }))
+    var tx = doaw['mint()']({ value: correctPrice })
+    await tx
+    var tokenId = await doaw.tokenByIndex(0);
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, owner.address, 1);
-    await expect(doaw.connect(addr1)['mint()']({ value: correctPrice }))
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenId);
+
+    tx = doaw.connect(addr1)['mint()']({ value: correctPrice })
+    await tx
+    tokenId = await doaw.tokenByIndex(1);
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, addr1.address, 2);
+      .withArgs(ethers.constants.AddressZero, addr1.address, tokenId);
   });
 
   it("checks whether mint fails with wrong price and succeeds even when price = 0", async function () {
@@ -345,16 +401,19 @@ describe("DoAW Tests", function () {
     await expect(doaw['mint()']())
       .to.be.revertedWith("WRONG PRICE");
     await doaw.setPrice("0")
-
-    await expect(doaw['mint()']()).to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, owner.address, 1);
+    var tx = doaw['mint()']()
+    await tx
+    var tokenId = await doaw.tokenByIndex(0);
+    await expect(tx).to.emit(doaw, "Transfer")
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenId);
   });
 
   it("adminMint from owner address", async function () {
     const [owner, addr1] = await ethers.getSigners();
     const { doaw } = await deployContracts();
-    await doaw.adminMint(addr1.address, 1);
-    expect(await doaw.ownerOf(1)).to.equal(addr1.address);
+    await doaw['adminMint(address,uint256)'](addr1.address, 1);
+    const tokenId = await doaw.tokenByIndex(0);
+    expect(await doaw.ownerOf(tokenId)).to.equal(addr1.address);
   });
 
   it("mints out and throws an error afterwards", async function () {
@@ -518,9 +577,12 @@ describe("DoAW Tests", function () {
     const timeUntilPremint = premint - now
     await ethers.provider.send('evm_increaseTime', [timeUntilPremint])
 
-    await expect(doaw.mintAllowList(1, hexProof))
+    const tx = doaw.mintAllowList(1, hexProof)
+    await tx
+    const tokenId = await doaw.tokenByIndex(0);
+    await expect(tx)
       .to.emit(doaw, "Transfer")
-      .withArgs(ethers.constants.AddressZero, owner.address, 1)
+      .withArgs(ethers.constants.AddressZero, owner.address, tokenId)
 
   })
 
@@ -561,8 +623,8 @@ describe("DoAW Tests", function () {
     }
     for (let i = 0; i < signers.length; i++) {
       const signer = signers[i]
-      const tokens = await doaw.tokensOfOwner(signer.address)
-      expect(tokens.length).to.equal(counts[i])
+      const balance = await doaw.balanceOf(signer.address)
+      expect(balance).to.equal(counts[i])
     }
   })
 
@@ -579,8 +641,8 @@ describe("DoAW Tests", function () {
     }
     for (let i = 0; i < signers.length; i++) {
       const signer = signers[i]
-      const tokens = await doaw.tokensOfOwner(signer.address)
-      expect(tokens.length).to.equal(counts[i])
+      const balance = await doaw.balanceOf(signer.address)
+      expect(balance).to.equal(counts[i])
     }
   })
 

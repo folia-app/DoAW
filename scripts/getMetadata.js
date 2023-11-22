@@ -1,11 +1,11 @@
 const { initContracts, decodeUri } = require("./utils");
 
 async function main() {
-  const { viper } = await initContracts();
+  const { doaw } = await initContracts();
 
   const tokenID = 1;
 
-  const metadata = await viper.tokenURI(tokenID);
+  const metadata = await doaw.tokenURI(tokenID);
   const metaWithoutDataURL = decodeUri(metadata);
   const obj1 = JSON.parse(metaWithoutDataURL);
   console.log(obj1);
