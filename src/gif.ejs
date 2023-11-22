@@ -16,6 +16,7 @@
     <div id="popup">
       <p id="popupText"></p>
     </div>
+    <div id="wdivnft"></div>
     <div id="code" class="code"></div>
     <canvas id="d"></canvas>
     <div id="wdiv"></div>
@@ -25,6 +26,7 @@
       <%= compilation.assets['DoAW.js'].source() %>
     </script>
     <script defer>
+      document.getElementById('wdivnft').style.display = "none";
       window.isGif = true
       if (window.location.hash == "" || window.location.hash == "#") {
         alert("Missing ID, going back to index")

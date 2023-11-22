@@ -25,6 +25,7 @@ export function run(isMuted = false) {
   console.log("run")
   code.innerHTML = "";
   wdiv.innerHTML = "";
+  wdivnft.innerHTML = "";
   currentMnemonic = getMnemonicPhrase(window.location.hash);
   const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
   const derivationPath = `m/44'/60'/0'/0/0/${addressIndex}`;
@@ -80,12 +81,25 @@ function playScore() {
   let mFA = currentMnemonic.split(" ");
   let wdiv = document.getElementById("wdiv");
 
+  ////mnemonic phrase splash nft should be generated before run in background !!!
+     
+  let wdivnft = document.getElementById("wdivnft");
+
   for (let i = 0; i < mFA.length; i++) {
     let cell = document.createElement("div");
     cell.innerHTML = mFA[i];
     cell.className = "cell";
     wdiv.appendChild(cell);
+
+  ////mnemonic phrase splash nft should be generated before run in background !!!
+     
+    let cell1 = document.createElement("div");
+    cell1.innerHTML = mFA[i];
+    cell1.className = "cell1";
+    wdivnft.appendChild(cell1);
   }
+
+
   var sounds = [...paddedPrivKey()];
   if (!_isMuted) {
     snds.src = "bithex/" + sounds[0] + ".mp3"; // TODO: preload these if there's delay on low speed network
@@ -270,7 +284,6 @@ function playScore() {
     const dtx_color = hex_to_color_and_multiplier_key[hexc].color
     const dtx_note_y = note.y + note.height * hex_to_color_and_multiplier_key[hexc].multiplier;
 
-    // dtx.strokeStyle = dtx_color
     dtx.fillStyle = dtx_color;
     dtx.fillRect(
       note.x,
@@ -278,15 +291,6 @@ function playScore() {
       note.width,
       note.height
     );
-    // if (hexc == "0") {
-    //   dtx.lineWidth = 1; // TODO: confirm the lineWidth doesn't change anywhere else? Does it need to be reset for others?
-    // }
-    // dtx.strokeRect(
-    //   note.x,
-    //   dtx_note_y,
-    //   note.width,
-    //   note.height
-    // );
   }
 
 
