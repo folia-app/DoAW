@@ -26,7 +26,6 @@ export function run(isMuted = false) {
   code.innerHTML = "";
   wdiv.innerHTML = "";
   wdivnft.innerHTML = "";
-  currentMnemonic = getMnemonicPhrase(window.location.hash);
   const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
   const derivationPath = `m/44'/60'/0'/0/0/${addressIndex}`;
   const account = hdNode.derivePath(derivationPath);
@@ -47,6 +46,7 @@ export function run(isMuted = false) {
 function getMnemonicPhrase(entropy) {
   let data
   if (entropy) {
+    entropy = entropy.replaceAll("-", "")
     entropy = entropy.replace("#", "")
     try {
       data = hexToBytes(entropy);
@@ -74,15 +74,13 @@ function getMnemonicPhrase(entropy) {
   return words;
 }
 
-///////////////////////////////////////
-
-function playScore() {
+export function addMnemonicToScreen() {
 
   let mFA = currentMnemonic.split(" ");
   let wdiv = document.getElementById("wdiv");
 
   ////mnemonic phrase splash nft should be generated before run in background !!!
-     
+
   let wdivnft = document.getElementById("wdivnft");
 
   for (let i = 0; i < mFA.length; i++) {
@@ -91,14 +89,20 @@ function playScore() {
     cell.className = "cell";
     wdiv.appendChild(cell);
 
-  ////mnemonic phrase splash nft should be generated before run in background !!!
-     
+    ////mnemonic phrase splash nft should be generated before run in background !!!
+
     let cell1 = document.createElement("div");
     cell1.innerHTML = mFA[i];
     cell1.className = "cell1";
     wdivnft.appendChild(cell1);
   }
 
+}
+
+///////////////////////////////////////
+
+function playScore() {
+  addMnemonicToScreen()
 
   var sounds = [...paddedPrivKey()];
   if (!_isMuted) {
@@ -344,3 +348,5 @@ function uint8ArrayToHex(a) {
   }
   return s;
 }
+
+currentMnemonic = getMnemonicPhrase(window.location.hash);

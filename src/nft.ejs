@@ -30,36 +30,33 @@
       <%= compilation.assets['DoAW.js'].source() %>
     </script>
     <script defer>
+      const doawExports = window.doawExports
+      let muted = false;
       if (window.location.hash == "" || window.location.hash == "#") {
         alert("Missing ID, going back to index")
         window.location = "/index.html";
       } else {
+        muted = window.location.hash.indexOf("-") > -1
         document.getElementsByTagName("body")[0].classList.add("has-entropy");
-        // get body
       }
       //console.log(window.location.hash.substring(0, 7))
       document.getElementById("splash").style.backgroundColor = window.location.hash.substring(0, 7);
-      ///
-    ////mnemonic phrase splash nft should be generated before run in background !!!
-      
+      console.log({currentMnemonic})
+      doawExports.addMnemonicToScreen()
+      if (muted) {
+        document.getElementById('parent').style.display = "none";
+        doawExports.run(true);
+      }
       let clicked = false
       document.addEventListener('click', clickFunction)
       function clickFunction() {
         if (! clicked) {
           document.getElementById('parent').style.display = "none";
-          const doawExports = window.doawExports
-     //!!!nft neeeds to play sound ! maybe only mute in grid on site
-      doawExports.snds.play(true);
+          doawExports.run(false);
           clicked = true
         } else {
         }
       }
-      const doawExports = window.doawExports
-      console.log({doawExports})
-      doawExports.run(true);
-        //!!!nft neeeds to play sound ! maybe only mute in grid on site
-      doawExports.snds.play(true);
-      //document.getElementsByTagName("body")[0].addEventListener('click', doawExports.pause)
     </script>
   </body>
 </html>

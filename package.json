@@ -9,10 +9,10 @@
     "build": "npx webpack --mode development",
     "chain": "ganache-cli -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'",
     "deploy": "hardhat run scripts/deploy.js",
-    "dev": "npx webpack serve --mode development",
+    "server-dev": "npx webpack serve --mode development",
+    "server": "npx live-server --port=8080 dist",
     "postinstall": "npx webpack --mode production",
     "optimize": "npx gifsicle -O2 -b --colors 256 -o foo.gif --resize-width 512",
-    "server": "npx live-server --port=8080 dist",
     "test": "hardhat test",
     "webgif": "npx webgif  -d 66",
     "webgif-long": "npx webgif  -d 98"
