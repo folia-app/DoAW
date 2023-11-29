@@ -11,7 +11,7 @@
     "deploy": "hardhat run scripts/deploy.js",
     "server-dev": "npx webpack serve --mode development",
     "server": "npx live-server --port=8080 dist",
-    "postinstall": "npx webpack --mode production",
+    "postinstall": "webpack --mode production",
     "optimize": "npx gifsicle -O2 -b --colors 256 -o foo.gif --resize-width 512",
     "test": "hardhat test",
     "webgif": "npx webgif  -d 66",
