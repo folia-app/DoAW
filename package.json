@@ -4,50 +4,32 @@
   "description": "Dead or Alive Wallet",
   "license": "CC-BY-NC-4.0",
   "author": "Joan Heemskerk (@johee) and Billy Rennekamp (@okwme)",
-  "main": "index.js",
+  "exports": {
+    ".": "./dist/*"
+  },
   "scripts": {
     "build": "npx webpack --mode development",
-    "chain": "ganache-cli -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat'",
-    "deploy": "hardhat run scripts/deploy.js",
     "server-dev": "npx webpack serve --mode development",
     "server": "npx live-server --port=8080 dist",
     "postinstall": "webpack --mode production",
     "optimize": "npx gifsicle -O2 -b --colors 256 -o foo.gif --resize-width 512",
-    "test": "hardhat test",
     "webgif": "npx webgif  -d 66",
     "webgif-long": "npx webgif  -d 98"
   },
   "dependencies": {
-    "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "*",
-    "@nomiclabs/hardhat-etherscan": "^3.1.0",
-    "@nomiclabs/hardhat-ganache": "*",
-    "@nomiclabs/hardhat-waffle": "*",
-    "@openzeppelin/contracts": "^4.6.0",
-    "ba64": "*",
-    "base64-sol": "*",
-    "chai": "*",
     "copy-webpack-plugin": "^11.0.0",
     "dotenv": "^16.0.1",
-    "erc721a": "^4.2.3",
     "eslint": "^8.26.0",
-    "ethereum-waffle": "*",
     "ethers": "^5.7.0",
-    "hardhat": "*",
-    "hardhat-contract-sizer": "*",
-    "hardhat-gas-reporter": "*",
     "html-webpack-plugin": "^5.5.3",
     "license-webpack-plugin": "^4.0.2",
-    "merkletreejs": "^0.3.10",
     "npm-check-updates": "*",
-    "solady": "^0.0.54",
-    "solc": "^0.8.15",
-    "solidity-bytes-utils": "*",
     "url-loader": "^4.1.1",
     "webgif": "^1.1.0",
     "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   }
 }
