@@ -17,7 +17,9 @@
     "webgif": "npx webgif  -d 66",
     "webgif-long": "npx webgif  -d 98"
   },
-  "dependencies": {},
+  "dependencies": {
+    "webpack-cli": "^5.1.4"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "*",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
@@ -46,7 +48,6 @@
     "url-loader": "^4.1.1",
     "webgif": "^1.1.0",
     "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   }
 }
