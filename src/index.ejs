@@ -46,6 +46,7 @@
           doawExports.snds.play();
           doawExports.run();
           clicked = true
+          window.parent.postMessage('run', '*');
         } else {
           doawExports.pause()
           console.log('posted message', doawExports.entropyHex)

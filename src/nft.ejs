@@ -54,7 +54,11 @@
           document.getElementById('parent').style.display = "none";
           doawExports.run(false);
           clicked = true
+          window.parent.postMessage('run', '*');
         } else {
+          doawExports.pause()
+          console.log('posted message', doawExports.entropyHex)
+          window.parent.postMessage(doawExports.entropyHex, '*');
         }
       }
     </script>
