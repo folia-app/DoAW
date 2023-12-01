@@ -25,19 +25,30 @@
     <script defer>
       <%= compilation.assets['DoAW.js'].source() %>
     </script>
-    <script defer>
-      document.getElementById('wdivnft').style.display = "none";
+    <script>
       window.isGif = true
       if (window.location.hash == "" || window.location.hash == "#") {
-        alert("Missing ID, going back to index")
-        window.location = "/index.html";
+        document.body.innerHTML = "<h1>bad hash</h1>"
       } else {
-        document.getElementsByTagName("body")[0].classList.add("has-entropy");
-        // get body
+        try {
+          document.getElementsByTagName("body")[0].classList.add("has-entropy");
+          // document.getElementById('parent').style.display = "none";
+          document.getElementById('wdivnft').style.display = "none";
+        } catch(e) {
+          console.log('error-1', e)
+          document.body.innerHTML = "<h1>error-1</h1>" + e
+        }
       }
-      const doawExports = window.doawExports
-      console.log({doawExports})
-      doawExports.run(true);
+      // try {
+      // const doawExports = window.doawExports
+      // document.body.innerHTML = "<h1>error-2</h1>" + JSON.stringify(doawExports)
+      // document.getElementById('debug').innerHTML = "<pre>" + JSON.stringify(doawExports, null, 2) + "</pre>";
+      // document.body.innerHTML = JSON.stringify(window, null, 2)
+      // doawExports.run(true);
+      // } catch(e) {
+      //   console.log('error-2', {e})
+      //   document.body.innerHTML = "<h1>error-2</h1>" + e
+      // }
     </script>
   </body>
 </html>

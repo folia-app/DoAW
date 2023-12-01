@@ -1,8 +1,9 @@
+require('dotenv').config(); // Load environment variables from .env file
+
 const { ethers, utils } = require("ethers");
 const contracts = require('doaw-contracts')
 const { getNetwork, getProvider } = require('./utils.js')
 const { addToQueue } = require('./render.js');
-console.log('network:', getNetwork())
 
 if (process.env.LISTEN == "false") return
 if (contracts.DoAW.networks[getNetwork()] == undefined) {

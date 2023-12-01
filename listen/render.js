@@ -3,7 +3,7 @@ const { ethers, utils } = require("ethers");
 const fs = require('fs');
 const client = require('https');
 const { spawn } = require('child_process');
-const { refreshOpensea, getNetwork, getProvider, formatName } = require('./utils.js')
+const { refreshOpensea, getNetwork, parseTokenId } = require('./utils.js')
 const path = require('path')
 const preloads = {}
 let lastCheckedQueueLength = 0
@@ -33,23 +33,27 @@ const queueChecker = setInterval(() => {
 
 
 var addToQueue = async function (tokenId) {
-  const queueIndex = queue.indexOf(tokenId)
-  const currentSpawnsIndex = currentSpawns.indexOf(tokenId)
+
+  let entropyHex, words, pk, address
+  ({ entropyHex } = parseTokenId(tokenId));
+
+  const queueIndex = queue.indexOf(entropyHex)
+  const currentSpawnsIndex = currentSpawns.indexOf(entropyHex)
 
   // make sure that gif is in queue
   if (queueIndex < 0 && currentSpawnsIndex < 0) {
-    console.log(`adding ${tokenId} to queue`)
-    queue.unshift(tokenId)
+    console.log(`adding ${entropyHex} to queue`)
+    queue.unshift(entropyHex)
   } else if (queueIndex > -1) {
-    console.log(`${tokenId} already in queue at position ${queueIndex}`)
+    console.log(`${entropyHex} already in queue at position ${queueIndex}`)
     if (queueIndex != 0) {
-      console.log(`moving ${tokenId} to front of queue`)
+      console.log(`moving ${entropyHex} to front of queue`)
       // move to front of queue
       queue.splice(queueIndex, 1)
-      queue.unshift(tokenId)
+      queue.unshift(entropyHex)
     }
   } else {
-    console.log(`${tokenId} already in currentSpawns at position ${currentSpawnsIndex}`)
+    console.log(`${entropyHex} already in currentSpawns at position ${currentSpawnsIndex}`)
   }
 }
 
@@ -103,7 +107,7 @@ const generateGif = async function (tokenId) {
   }
 
   currentSpawns.push(tokenId)
-  const dirPrefix = "gifs/" + (process.env.network == "homestead" ? "" : process.env.network + "-") + "gifs/"
+  const dirPrefix = "../gifs/"
 
   // check if gif is already generated
   // if so, return gif

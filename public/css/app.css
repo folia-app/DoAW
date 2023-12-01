@@ -137,7 +137,7 @@ z-index doesnt work now because of click function */
   position: absolute;
   left: 0%;
   width: calc(100% - 20px);
-  height: 15%;
+  height: 2%;
   text-transform: uppercase;
   font-family: "zx-spectrum", monospace;
   font-size: 1vw;

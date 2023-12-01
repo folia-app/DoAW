@@ -1,6 +1,39 @@
 const { ethers } = require("ethers");
 // const contracts = require('doaw-contracts')
 
+function parseTokenId(tokenId) {
+  // check if tokenId would be accepted by BigNumber as a number
+  tokenId = ethers.BigNumber.from(tokenId)
+  const entropyHex = tokenId.toHexString(16).replace('0x', '').padStart(32, '0')
+  let data = hexToBytes(entropyHex)
+  const words = ethers.utils.entropyToMnemonic(data)
+  const path = ethers.utils.defaultPath
+  const hdNode = ethers.utils.HDNode.fromMnemonic(words)
+  const pk = hdNode.derivePath(path).privateKey
+  const wallet = new ethers.Wallet(pk)
+  const address = wallet.address
+  return {
+    tokenId,
+    entropyHex,
+    data,
+    words,
+    hdNode,
+    pk,
+    wallet,
+    address
+  }
+}
+
+const hexToBytes = (hextropy) => {
+  var bytes = []
+  for (var c = 0; c < hextropy.length; c += 2) {
+    const int = parseInt(hextropy.substr(c, 2), 16)
+    if (isNaN(int)) throw new Error('Entropy is not valid hex')
+    bytes.push(int)
+  }
+  return bytes
+}
+
 
 function getNetwork() {
   return process.env.network
@@ -65,4 +98,4 @@ function boo(res, int) {
   return res.status(404).send(int.toString() || '404')
 }
 
-module.exports = { refreshOpensea, boo, getNetwork, getNetworkId, getProvider }
+module.exports = { refreshOpensea, boo, getNetwork, getNetworkId, getProvider, parseTokenId, hexToBytes }
