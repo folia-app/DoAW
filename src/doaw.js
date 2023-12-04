@@ -109,10 +109,11 @@ try {
 
   }
 
-  window.addEventListener('skip', skip)
+  window.addEventListener('message', skip)
   ///////////////////////////////////////
   let index
   function skip(e) {
+    if (e.data !== 'skip') return
     index = 0
     addressIndex = 0
     currentMnemonic = getMnemonicPhrase();
