@@ -15,6 +15,7 @@ try {
   paused = false
   pause = () => {
     paused = !paused
+    window.parent.postMessage(entropyHex, '*');
   }
 
   let img = new Image(), imgLoaded = false
