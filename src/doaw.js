@@ -109,16 +109,24 @@ try {
 
   }
 
-  window.addEventListener('message', skip)
+  window.addEventListener('message', msgListener)
+  function msgListener(e) {
+    if (e.data === 'skip') {
+      skip()
+    } else if (e.data === 'pause') {
+      pause()
+    } else {
+      console.log(`Unknown message: ${e.data}`)
+    }
+  }
   ///////////////////////////////////////
   let index
-  function skip(e) {
-    if (e.data !== 'skip') return
+  function skip() {
     index = 0
     addressIndex = 0
     currentMnemonic = getMnemonicPhrase();
-    console.log(event.data)
   }
+
   function playScore() {
     addMnemonicToScreen()
 
@@ -153,7 +161,7 @@ try {
         if (window.location.hash.indexOf(entropyHex) > -1) {
           addressIndex++;
         } else {
-          currentMnemonic = getMnemonicPhrase();
+          skip()
         }
         run(_isMuted);
       }
