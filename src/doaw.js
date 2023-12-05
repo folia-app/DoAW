@@ -3,14 +3,14 @@ import { utils } from 'ethers';
 // const snds = new Audio("bithex/0.mp3");
 let wdivnft = document.getElementById("wdivnft");
 
-let addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase, loadedSounds = {}
+let index, addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase, loadedSounds = {}
 try {
   let privkey, address, dpi
 
   let code_el = document.getElementById("code");
 
   let Draw
-  const onResize = () => Draw && Draw()
+  const onResize = () => Draw && Draw(index)
   window.addEventListener("resize", onResize);
 
   paused = false
@@ -27,13 +27,6 @@ try {
   img.src = "bitimg/00.png";
   img.onload = () => imgLoaded = true
   var _isMuted = false
-  setTimeout(() => {
-    if (window.isGif) {
-      getMnemonicPhrase(window.location.hash);
-      addMnemonicToScreen()
-      run(true)
-    }
-  }, 100)
   run = function (isMuted = false) {
     _isMuted = isMuted
     code.innerHTML = "";
@@ -55,10 +48,9 @@ try {
   }
 
   getMnemonicPhrase = (entropy) => {
-    console.log('entropy', entropy)
     let data
-    if (entropy) {
-      entropy = entropy.replaceAll("-", "")
+    if (entropy !== '' && entropy !== null && entropy !== undefined) {
+      entropy = entropy.replace("-", "")
       entropy = entropy.replace("#", "")
       try {
         data = hexToBytes(entropy);
@@ -91,23 +83,23 @@ try {
     // const ethPubKey = account.publicKey
     address = account.address
 
-    loadSounds()
+    // loadSounds()
   }
 
-  let loadSounds = async function () {
-    const letters = '0123456789abcdefxoy'.split('')
-    for (let i = 0; i < letters.length; i++) {
-      await new Promise((resolve, reject) => {
-        let snd = new Audio("bithex/" + letters[i] + ".mp3");
-        snd.load();
-        snd.addEventListener('canplaythrough', function () {
-          loadedSounds[letters[i]] = snd
-          resolve()
-          // Perform actions after the song has loaded
-        });
-      })
-    }
-  }
+  // let loadSounds = async function () {
+  //   const letters = '0123456789abcdefxoy'.split('')
+  //   for (let i = 0; i < letters.length; i++) {
+  //     await new Promise((resolve, reject) => {
+  //       let snd = new Audio("bithex/" + letters[i] + ".mp3");
+  //       snd.load();
+  //       snd.addEventListener('canplaythrough', function () {
+  //         loadedSounds[letters[i]] = snd
+  //         resolve()
+  //         // Perform actions after the song has loaded
+  //       });
+  //     })
+  //   }
+  // }
 
 
   addMnemonicToScreen = function () {
@@ -145,7 +137,6 @@ try {
     }
   }
   ///////////////////////////////////////
-  let index
   function skip() {
     index = 0
     addressIndex = 0
@@ -156,7 +147,7 @@ try {
 
     var sounds = [...paddedPrivKey()];
     if (!_isMuted) {
-      loadedSounds['y'].play()
+      document.getElementById('a-0').play()
     }
 
     index = window.isGif ? 1 : 0;
@@ -167,21 +158,19 @@ try {
         return
       }
       index++;
+      const sound = sounds[index] == "y" || sounds[index] == "x" || sounds[index] == "o" ? "0" : sounds[index]
       if (index < sounds.length) {
         if (!_isMuted) {
-          loadedSounds[sounds[index]].play()
-          loadedSounds[sounds[index]].onended = progress
+          document.getElementById('a-' + sound).currentTime = 0; // Set timecode to beginning
+          document.getElementById('a-' + sound).play()
+          document.getElementById('a-' + sound).onended = progress
           // snds.src = "bithex/" + sounds[index] + ".mp3";
           // snds.play();
         } else {
           setTimeout(progress, noSoundTimeoutLength)
         }
-        Draw(index, sounds[index]);
+        Draw(index);
       } else {
-        if (!_isMuted) {
-          // loadedSounds[sounds[index]].pause()
-          // snds.pause();
-        }
         index = 0;
         if (window.location.hash.indexOf(entropyHex) > -1) {
           addressIndex++;
@@ -192,7 +181,9 @@ try {
       }
     }
 
-    Draw = async function (index, hexc) {
+    Draw = async function (index) {
+      var sounds = [...paddedPrivKey()];
+      let hexc = sounds[index]
       var Wstr = paddedPrivKey()
       var Nextstr = Wstr.slice(0, -2)
       if (hexc !== "o" && hexc !== "x") {
@@ -351,7 +342,7 @@ try {
     }
     if (!_isMuted) {
       // snds.onended = progress
-      loadedSounds['y'].onended = progress
+      document.getElementById('a-0').onended = progress
     } else {
       progress()
     }
