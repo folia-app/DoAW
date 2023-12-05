@@ -91,23 +91,23 @@ try {
     // const ethPubKey = account.publicKey
     address = account.address
 
-    loadSounds()
+    // loadSounds()
   }
 
-  let loadSounds = async function () {
-    const letters = '0123456789abcdefxoy'.split('')
-    for (let i = 0; i < letters.length; i++) {
-      await new Promise((resolve, reject) => {
-        let snd = new Audio("bithex/" + letters[i] + ".mp3");
-        snd.load();
-        snd.addEventListener('canplaythrough', function () {
-          loadedSounds[letters[i]] = snd
-          resolve()
-          // Perform actions after the song has loaded
-        });
-      })
-    }
-  }
+  // let loadSounds = async function () {
+  //   const letters = '0123456789abcdefxoy'.split('')
+  //   for (let i = 0; i < letters.length; i++) {
+  //     await new Promise((resolve, reject) => {
+  //       let snd = new Audio("bithex/" + letters[i] + ".mp3");
+  //       snd.load();
+  //       snd.addEventListener('canplaythrough', function () {
+  //         loadedSounds[letters[i]] = snd
+  //         resolve()
+  //         // Perform actions after the song has loaded
+  //       });
+  //     })
+  //   }
+  // }
 
 
   addMnemonicToScreen = function () {
@@ -156,7 +156,7 @@ try {
 
     var sounds = [...paddedPrivKey()];
     if (!_isMuted) {
-      loadedSounds['y'].play()
+      document.getElementById('a-0').play()
     }
 
     index = window.isGif ? 1 : 0;
@@ -167,10 +167,12 @@ try {
         return
       }
       index++;
+      const sound = sounds[index] == "y" || sounds[index] == "x" || sounds[index] == "o" ? "0" : sounds[index]
       if (index < sounds.length) {
         if (!_isMuted) {
-          loadedSounds[sounds[index]].play()
-          loadedSounds[sounds[index]].onended = progress
+          console.log(sounds[index])
+          document.getElementById('a-' + sound).play()
+          document.getElementById('a-' + sound).onended = progress
           // snds.src = "bithex/" + sounds[index] + ".mp3";
           // snds.play();
         } else {
@@ -351,7 +353,7 @@ try {
     }
     if (!_isMuted) {
       // snds.onended = progress
-      loadedSounds['y'].onended = progress
+      document.getElementById('a-0').onended = progress
     } else {
       progress()
     }
