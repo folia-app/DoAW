@@ -36,15 +36,15 @@
       }
       const doawExports = window.doawExports
       console.log({doawExports})
-      console.log(`entropyHex: ${doawExports.entropyHex}`)
       let clicked = false
       doawExports.runMnemonic()
+      console.log(`entropyHex: ${doawExports.entropyHex}`)
       document.addEventListener('click', clickFunction)
       function clickFunction() {
         if (! clicked) {
           document.getElementById('parent').style.display = "none";
           document.getElementById('wdivnft').style.display = "none";
-          doawExports.snds.play();
+          // doawExports.snds.play();
           doawExports.run();
           clicked = true
           window.parent.postMessage('run', '*');

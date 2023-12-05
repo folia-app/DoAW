@@ -147,6 +147,9 @@ z-index doesnt work now because of click function */
   grid-gap: 1vh;
   z-index: 1;
 }
+#wdiv,#code,  #privkey {
+  cursor: text !important;
+}
 
 #wdivnft {
   position: absolute;
