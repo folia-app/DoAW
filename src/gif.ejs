@@ -34,10 +34,8 @@
           const doawExports = window.doawExports
           doawExports.runMnemonic()
           document.getElementsByTagName("body")[0].classList.add("has-entropy");
-          // document.getElementById('parent').style.display = "none";
           document.getElementById('wdivnft').style.display = "none";
           doawExports.run(true)
-          console.log('daowexports', doawExports)
         } catch(e) {
           console.log('error-1', e)
           document.body.innerHTML = "<h1>error-1</h1>" + e

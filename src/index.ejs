@@ -11,23 +11,6 @@
     <link rel="stylesheet" href="css/app.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <meta name="description" content="<%= compilation.options.plugins.find(plugin => plugin.constructor.name === 'HtmlWebpackPlugin').options.metaDesc %> "/>
-    <!-- <link id="a-0" preload="auto" href="bithex/0.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-1" preload="auto" href="bithex/1.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-2" preload="auto" href="bithex/2.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-3" preload="auto" href="bithex/3.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-4" preload="auto" href="bithex/4.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-5" preload="auto" href="bithex/5.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-6" preload="auto" href="bithex/6.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-7" preload="auto" href="bithex/7.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-8" preload="auto" href="bithex/8.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-9" preload="auto" href="bithex/9.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-a" preload="auto" href="bithex/a.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-b" preload="auto" href="bithex/b.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-c" preload="auto" href="bithex/c.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-d" preload="auto" href="bithex/d.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-e" preload="auto" href="bithex/e.mp3" as="audio" type="audio/mpeg" />
-    <link id="a-f" preload="auto" href="bithex/f.mp3" as="audio" type="audio/mpeg" /> -->
-    
   </head>
   <body>
     <audio id="a-0" preload="auto" style="display: none;"><source src="bithex/0.mp3" type="audio/mp3"></audio>
@@ -69,10 +52,8 @@
         // get body
       }
       const doawExports = window.doawExports
-      console.log({doawExports})
       let clicked = false
       doawExports.runMnemonic()
-      console.log(`entropyHex: ${doawExports.entropyHex}`)
       document.addEventListener('click', clickFunction)
       function clickFunction() {
         if (! clicked) {
@@ -84,7 +65,6 @@
           window.parent.postMessage('run', '*');
         } else {
           doawExports.pause()
-          console.log('posted message', doawExports.entropyHex)
         }
       }
     </script>
