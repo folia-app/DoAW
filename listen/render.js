@@ -12,7 +12,7 @@ const currentSpawns = []
 var os = require('os');
 var cores = os.cpus().length
 const servers = process.env.SERVERS ? parseInt(process.env.SERVERS) : 1
-const maxSpawns = Math.ceil((cores > 2 ? cores - 2 : 1) / servers)
+const maxSpawns = Math.ceil((cores > 4 ? cores - 4 : 1) / servers)
 console.log(`max spawns: ${maxSpawns}`)
 
 let totalTime = 0

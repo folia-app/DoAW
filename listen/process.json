@@ -1,0 +1,23 @@
+{
+  "name": "doaw-server",
+  "watch": false,
+  "env": {
+    "PORT": 3001,
+    "network": "sepolia",
+    "baseURL": "http://localhost:3003",
+    "NODE_ENV": "development",
+    "GENERATE_GIFS": true,
+    "SERVERS": 1,
+    "LISTEN": true
+  },
+  "script": "listen/listen.js",
+  "ignore_watch": [
+    "node_modules",
+    "output",
+    "gifs",
+    "public"
+  ],
+  "watch_options": {
+    "followSymlinks": false
+  }
+}
