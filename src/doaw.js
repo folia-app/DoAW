@@ -36,7 +36,6 @@ try {
   }, 100)
   run = function (isMuted = false) {
     _isMuted = isMuted
-    console.log("run")
     code.innerHTML = "";
     wdiv.innerHTML = "";
     wdivnft.innerHTML = "";
@@ -96,16 +95,13 @@ try {
   }
 
   let loadSounds = async function () {
-    console.log('loadSongs')
     const letters = '0123456789abcdefxoy'.split('')
     for (let i = 0; i < letters.length; i++) {
-      console.log('loading ' + i)
       await new Promise((resolve, reject) => {
         let snd = new Audio("bithex/" + letters[i] + ".mp3");
         snd.load();
         snd.addEventListener('canplaythrough', function () {
           loadedSounds[letters[i]] = snd
-          console.log('Song loaded');
           resolve()
           // Perform actions after the song has loaded
         });
@@ -160,18 +156,12 @@ try {
 
     var sounds = [...paddedPrivKey()];
     if (!_isMuted) {
-      // console.log(loadedSounds[0], loadedSounds[0].src)
       loadedSounds['y'].play()
-      // console.log({ snds })
-      // snds.src = "bithex/" + sounds[0] + ".mp3"; // TODO: preload these if there's delay on low speed network
-      // snds.play();
     }
 
     index = window.isGif ? 1 : 0;
     const noSoundTimeoutLength = window.isGif ? 1000 : 200
-    console.log('playScore')
     const progress = function () {
-      console.log('progress')
       if (paused) {
         setTimeout(progress, noSoundTimeoutLength)
         return
@@ -189,7 +179,7 @@ try {
         Draw(index, sounds[index]);
       } else {
         if (!_isMuted) {
-          loadedSounds[sounds[index]].pause()
+          // loadedSounds[sounds[index]].pause()
           // snds.pause();
         }
         index = 0;
@@ -203,7 +193,6 @@ try {
     }
 
     Draw = async function (index, hexc) {
-      console.log('draw')
       var Wstr = paddedPrivKey()
       var Nextstr = Wstr.slice(0, -2)
       if (hexc !== "o" && hexc !== "x") {
@@ -265,7 +254,6 @@ try {
 
       // can't imagine anyone clicks the loader before img is loaded, but if they do, this will wait for it
       if (!imgLoaded) {
-        console.log('loading img')
         await new Promise((resolve) => {
           let checkLoaded = setInterval(() => {
             if (imgLoaded) {
@@ -361,17 +349,11 @@ try {
         note.height
       );
     }
-
-    console.log('here?')
-    try {
-      if (!_isMuted) {
-        // snds.onended = progress
-        loadedSounds['y'].onended = progress
-      } else {
-        progress()
-      }
-    } catch (e) {
-      console.log('huh?', { e })
+    if (!_isMuted) {
+      // snds.onended = progress
+      loadedSounds['y'].onended = progress
+    } else {
+      progress()
     }
 
   }
