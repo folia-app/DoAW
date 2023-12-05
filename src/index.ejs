@@ -38,6 +38,7 @@
       console.log({doawExports})
       console.log(`entropyHex: ${doawExports.entropyHex}`)
       let clicked = false
+      doawExports.runMnemonic()
       document.addEventListener('click', clickFunction)
       function clickFunction() {
         if (! clicked) {

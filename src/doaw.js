@@ -1,10 +1,11 @@
 import { utils } from 'ethers';
 
 const snds = new Audio("bithex/0.mp3");
+let wdivnft = document.getElementById("wdivnft");
 
-let addressIndex = 0, entropyHex, paused, pause, run, addMnemonicToScreen
+let addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase
 try {
-  let privkey, address, currentMnemonic, dpi
+  let privkey, address, dpi
 
   let code_el = document.getElementById("code");
 
@@ -18,14 +19,18 @@ try {
     window.parent.postMessage(entropyHex, '*');
   }
 
+  runMnemonic = () => {
+    currentMnemonic = getMnemonicPhrase(window.location.hash);
+  }
+
   let img = new Image(), imgLoaded = false
   img.src = "bitimg/00.png";
   img.onload = () => imgLoaded = true
   var _isMuted = false
   setTimeout(() => {
-    currentMnemonic = getMnemonicPhrase(window.location.hash);
-    console.log(window.isGif)
     if (window.isGif) {
+      currentMnemonic = getMnemonicPhrase(window.location.hash);
+      addMnemonicToScreen()
       run(true)
     }
   }, 100)
@@ -36,6 +41,7 @@ try {
     wdiv.innerHTML = "";
     wdivnft.innerHTML = "";
     console.log('currentMnemonic', currentMnemonic)
+    addMnemonicToScreen()
     const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
     const derivationPath = `m/44'/60'/0'/0/0/${addressIndex}`;
     const account = hdNode.derivePath(derivationPath);
@@ -53,7 +59,7 @@ try {
     playScore()
   }
 
-  function getMnemonicPhrase(entropy) {
+  getMnemonicPhrase = (entropy) => {
     console.log('entropy', entropy)
     let data
     if (entropy) {
@@ -85,6 +91,7 @@ try {
     return words;
   }
 
+
   addMnemonicToScreen = function () {
     if (!currentMnemonic) return
     let mFA = currentMnemonic.split(" ");
@@ -92,7 +99,6 @@ try {
 
     ////mnemonic phrase splash nft should be generated before run in background !!!
 
-    let wdivnft = document.getElementById("wdivnft");
 
     for (let i = 0; i < mFA.length; i++) {
       let cell = document.createElement("div");
@@ -129,7 +135,6 @@ try {
   }
 
   function playScore() {
-    addMnemonicToScreen()
 
     var sounds = [...paddedPrivKey()];
     if (!_isMuted) {
@@ -387,5 +392,6 @@ export {
   addressIndex,
   entropyHex,
   snds,
-  addMnemonicToScreen
+  addMnemonicToScreen,
+  runMnemonic
 };

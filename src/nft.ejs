@@ -42,17 +42,18 @@
       //console.log(window.location.hash.substring(0, 7))
       document.getElementById("splash").style.backgroundColor = window.location.hash.substring(0, 7);
 
+      doawExports.runMnemonic()
       doawExports.addMnemonicToScreen()
       if (muted) {
         document.getElementById('parent').style.display = "none";
-        doawExports.run(true);
+        doawExports.run(true)
       }
       let clicked = false
       document.addEventListener('click', clickFunction)
       function clickFunction() {
         if (! clicked) {
           document.getElementById('parent').style.display = "none";
-          doawExports.run(false);
+          doawExports.run(false)
           clicked = true
           window.parent.postMessage('run', '*');
         } else {
@@ -60,6 +61,8 @@
           console.log('posted message', doawExports.entropyHex)
         }
       }
+
+
     </script>
   </body>
 </html>
