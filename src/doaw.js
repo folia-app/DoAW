@@ -1,9 +1,9 @@
 import { utils } from 'ethers';
 
-const snds = new Audio("bithex/0.mp3");
+// const snds = new Audio("bithex/0.mp3");
 let wdivnft = document.getElementById("wdivnft");
 
-let addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase
+let addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase, loadedSounds = {}
 try {
   let privkey, address, dpi
 
@@ -20,7 +20,7 @@ try {
   }
 
   runMnemonic = () => {
-    currentMnemonic = getMnemonicPhrase(window.location.hash);
+    getMnemonicPhrase(window.location.hash);
   }
 
   let img = new Image(), imgLoaded = false
@@ -29,7 +29,7 @@ try {
   var _isMuted = false
   setTimeout(() => {
     if (window.isGif) {
-      currentMnemonic = getMnemonicPhrase(window.location.hash);
+      getMnemonicPhrase(window.location.hash);
       addMnemonicToScreen()
       run(true)
     }
@@ -42,12 +42,8 @@ try {
     wdivnft.innerHTML = "";
     console.log('currentMnemonic', currentMnemonic)
     addMnemonicToScreen()
-    const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
     const derivationPath = `m/44'/60'/0'/0/0/${addressIndex}`;
-    const account = hdNode.derivePath(derivationPath);
-    privkey = account.privateKey
-    // const ethPubKey = account.publicKey
-    address = account.address
+
 
     code_el.innerHTML +=
       "<span class='index'> " + derivationPath + " </span>"; // addressIndex rotation endless addressIndex++
@@ -88,7 +84,33 @@ try {
       return getMnemonicPhrase()
     }
     entropyHex = uint8ArrayToHex(data);
-    return words;
+    currentMnemonic = words;
+    const derivationPath = `m/44'/60'/0'/0/0/${addressIndex}`;
+    const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
+    const account = hdNode.derivePath(derivationPath);
+    privkey = account.privateKey
+    // const ethPubKey = account.publicKey
+    address = account.address
+
+    loadSounds()
+  }
+
+  let loadSounds = async function () {
+    console.log('loadSongs')
+    const letters = '0123456789abcdefxoy'.split('')
+    for (let i = 0; i < letters.length; i++) {
+      console.log('loading ' + i)
+      await new Promise((resolve, reject) => {
+        let snd = new Audio("bithex/" + letters[i] + ".mp3");
+        snd.load();
+        snd.addEventListener('canplaythrough', function () {
+          loadedSounds[letters[i]] = snd
+          console.log('Song loaded');
+          resolve()
+          // Perform actions after the song has loaded
+        });
+      })
+    }
   }
 
 
@@ -123,7 +145,7 @@ try {
     } else if (e.data === 'pause') {
       pause()
     } else {
-      console.log(`Unknown message: ${e.data}`)
+      console.log(`Unknown message: ${e.data}`, e)
     }
   }
   ///////////////////////////////////////
@@ -131,21 +153,25 @@ try {
   function skip() {
     index = 0
     addressIndex = 0
-    currentMnemonic = getMnemonicPhrase();
+    getMnemonicPhrase();
   }
 
   function playScore() {
 
     var sounds = [...paddedPrivKey()];
     if (!_isMuted) {
-      snds.src = "bithex/" + sounds[0] + ".mp3"; // TODO: preload these if there's delay on low speed network
-      snds.play();
+      // console.log(loadedSounds[0], loadedSounds[0].src)
+      loadedSounds['y'].play()
+      // console.log({ snds })
+      // snds.src = "bithex/" + sounds[0] + ".mp3"; // TODO: preload these if there's delay on low speed network
+      // snds.play();
     }
 
     index = window.isGif ? 1 : 0;
     const noSoundTimeoutLength = window.isGif ? 1000 : 200
-
+    console.log('playScore')
     const progress = function () {
+      console.log('progress')
       if (paused) {
         setTimeout(progress, noSoundTimeoutLength)
         return
@@ -153,15 +179,18 @@ try {
       index++;
       if (index < sounds.length) {
         if (!_isMuted) {
-          snds.src = "bithex/" + sounds[index] + ".mp3";
-          snds.play();
+          loadedSounds[sounds[index]].play()
+          loadedSounds[sounds[index]].onended = progress
+          // snds.src = "bithex/" + sounds[index] + ".mp3";
+          // snds.play();
         } else {
           setTimeout(progress, noSoundTimeoutLength)
         }
         Draw(index, sounds[index]);
       } else {
         if (!_isMuted) {
-          snds.pause();
+          loadedSounds[sounds[index]].pause()
+          // snds.pause();
         }
         index = 0;
         if (window.location.hash.indexOf(entropyHex) > -1) {
@@ -174,6 +203,7 @@ try {
     }
 
     Draw = async function (index, hexc) {
+      console.log('draw')
       var Wstr = paddedPrivKey()
       var Nextstr = Wstr.slice(0, -2)
       if (hexc !== "o" && hexc !== "x") {
@@ -235,6 +265,7 @@ try {
 
       // can't imagine anyone clicks the loader before img is loaded, but if they do, this will wait for it
       if (!imgLoaded) {
+        console.log('loading img')
         await new Promise((resolve) => {
           let checkLoaded = setInterval(() => {
             if (imgLoaded) {
@@ -331,11 +362,16 @@ try {
       );
     }
 
-
-    if (!_isMuted) {
-      snds.onended = progress
-    } else {
-      progress()
+    console.log('here?')
+    try {
+      if (!_isMuted) {
+        // snds.onended = progress
+        loadedSounds['y'].onended = progress
+      } else {
+        progress()
+      }
+    } catch (e) {
+      console.log('huh?', { e })
     }
 
   }
@@ -391,7 +427,7 @@ export {
   run,
   addressIndex,
   entropyHex,
-  snds,
+  // snds,
   addMnemonicToScreen,
   runMnemonic
 };
