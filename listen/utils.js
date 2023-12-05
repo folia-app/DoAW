@@ -4,7 +4,7 @@ const { ethers } = require("ethers");
 function parseTokenId(tokenId) {
   // check if tokenId would be accepted by BigNumber as a number
   tokenId = ethers.BigNumber.from(tokenId)
-  const entropyHex = tokenId.toHexString(16).replace('0x', '').padStart(32, '0')
+  const entropyHex = tokenId.toHexString(16).replace('0x', '').padStart(16, '0')
   let data = hexToBytes(entropyHex)
   const words = ethers.utils.entropyToMnemonic(data)
   const path = ethers.utils.defaultPath
