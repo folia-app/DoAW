@@ -1,6 +1,6 @@
 import { utils } from 'ethers';
 
-// const snds = new Audio("bithex/0.mp3");
+const snds = new Audio("bithex/0.mp3");
 let wdivnft = document.getElementById("wdivnft");
 
 let index, addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase, loadedSounds = {}
@@ -147,7 +147,9 @@ try {
 
     var sounds = [...paddedPrivKey()];
     if (!_isMuted) {
-      document.getElementById('a-0').play()
+      // document.getElementById('a-0').play()
+      snds.src = "bithex/0.mp3";
+      snds.play()
     }
 
     index = window.isGif ? 1 : 0;
@@ -161,11 +163,11 @@ try {
       const sound = sounds[index] == "y" || sounds[index] == "x" || sounds[index] == "o" ? "0" : sounds[index]
       if (index < sounds.length) {
         if (!_isMuted) {
-          document.getElementById('a-' + sound).currentTime = 0; // Set timecode to beginning
-          document.getElementById('a-' + sound).play()
-          document.getElementById('a-' + sound).onended = progress
-          // snds.src = "bithex/" + sounds[index] + ".mp3";
-          // snds.play();
+          //   document.getElementById('a-' + sound).currentTime = 0; // Set timecode to beginning
+          //   document.getElementById('a-' + sound).play()
+          //   document.getElementById('a-' + sound).onended = progress
+          snds.src = "bithex/" + sounds[index] + ".mp3";
+          snds.play();
         } else {
           setTimeout(progress, noSoundTimeoutLength)
         }
@@ -341,8 +343,8 @@ try {
       );
     }
     if (!_isMuted) {
-      // snds.onended = progress
-      document.getElementById('a-0').onended = progress
+      snds.onended = progress
+      // document.getElementById('a-0').onended = progress
     } else {
       progress()
     }
@@ -400,7 +402,7 @@ export {
   run,
   addressIndex,
   entropyHex,
-  // snds,
+  snds,
   addMnemonicToScreen,
   runMnemonic
 };
