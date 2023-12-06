@@ -3,7 +3,7 @@ import { utils } from 'ethers';
 // const snds = new Audio("bithex/0.mp3");
 let wdivnft = document.getElementById("wdivnft");
 
-let index, addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase, loadedSounds = {}
+let loadedSound, index, addressIndex = 0, currentMnemonic, runMnemonic, entropyHex, paused, pause, run, addMnemonicToScreen, getMnemonicPhrase, loadedSounds = {}
 try {
   let privkey, address, dpi
 
@@ -82,7 +82,6 @@ try {
     privkey = account.privateKey
     // const ethPubKey = account.publicKey
     address = account.address
-
     // loadSounds()
   }
 
@@ -101,14 +100,12 @@ try {
   //   }
   // }
 
-
   addMnemonicToScreen = function () {
     if (!currentMnemonic) return
     let mFA = currentMnemonic.split(" ");
     let wdiv = document.getElementById("wdiv");
 
     ////mnemonic phrase splash nft should be generated before run in background !!!
-
 
     for (let i = 0; i < mFA.length; i++) {
       let cell = document.createElement("div");
@@ -123,9 +120,7 @@ try {
       cell1.className = "cell1";
       wdivnft.appendChild(cell1);
     }
-
   }
-
   window.addEventListener('message', msgListener)
   function msgListener(e) {
     if (e.data === 'skip') {
@@ -144,26 +139,64 @@ try {
   }
 
   function playScore() {
+    const noSoundTimeoutLength = window.isGif ? 1000 : 300
 
     var sounds = [...paddedPrivKey()];
     if (!_isMuted) {
-      document.getElementById('a-0').play()
+
+      playSound('0')
+      setTimeout(() => { progress() }, noSoundTimeoutLength)
+    }
+
+    function playSound(sound) {
+      if (sound == "0") {
+        return
+      }
+      const soundtime = {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3,
+        "5": 4,
+        "6": 5,
+        "7": 6,
+        "8": 7,
+        "9": 8,
+        "a": 9,
+        "b": 10,
+        "c": 11,
+        "d": 12,
+        "e": 13,
+        "f": 14
+      }
+      if (!loadedSound) {
+        loadedSound = [
+          document.getElementById('all-sound').cloneNode(true),
+          document.getElementById('all-sound').cloneNode(true),
+          document.getElementById('all-sound').cloneNode(true),
+        ]
+      }
+      console.log(index % 3)
+      console.log(loadedSound[index % 3])
+      loadedSound[index % 3].currentTime = soundtime[sound]
+      loadedSound[index % 3].play()
     }
 
     index = window.isGif ? 1 : 0;
-    const noSoundTimeoutLength = window.isGif ? 1000 : 200
     const progress = function () {
       if (paused) {
-        setTimeout(progress, noSoundTimeoutLength)
+        setTimeout(() => { progress() }, noSoundTimeoutLength)
         return
       }
       index++;
       const sound = sounds[index] == "y" || sounds[index] == "x" || sounds[index] == "o" ? "0" : sounds[index]
       if (index < sounds.length) {
         if (!_isMuted) {
-          document.getElementById('a-' + sound).currentTime = 0; // Set timecode to beginning
-          document.getElementById('a-' + sound).play()
-          document.getElementById('a-' + sound).onended = progress
+          playSound(sound)
+          setTimeout(() => { progress() }, noSoundTimeoutLength)
+          // document.getElementById('a-' + sound).currentTime = 0; // Set timecode to beginning
+          // document.getElementById('a-' + sound).play()
+          // document.getElementById('a-' + sound).onended = progress
           // snds.src = "bithex/" + sounds[index] + ".mp3";
           // snds.play();
         } else {
@@ -342,7 +375,7 @@ try {
     }
     if (!_isMuted) {
       // snds.onended = progress
-      document.getElementById('a-0').onended = progress
+      // document.getElementById('a-0').onended = progress
     } else {
       progress()
     }
