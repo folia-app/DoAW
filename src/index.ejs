@@ -30,14 +30,20 @@
       <%= compilation.assets['DoAW.js'].source() %>
     </script>
     <script defer>
-
+      let muted = false
       if (window.location.hash !== "" && window.location.hash !== "#") {
+        muted = true
         document.getElementsByTagName("body")[0].classList.add("has-entropy");
-        // get body
       }
       const doawExports = window.doawExports
       let clicked = false
       doawExports.runMnemonic()
+      if (muted) {
+        document.getElementById('parent').style.display = "none";
+        document.getElementById('wdivnft').style.display = "none";
+        doawExports.run(true)
+        clicked =true
+      }
       document.addEventListener('click', clickFunction)
       function clickFunction() {
         if (! clicked) {
