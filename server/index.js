@@ -22,11 +22,11 @@ router.get('/v1/metadata/*', async function (req, res, next) {
   } catch (e) {
     return boo(res, `Invalid Token\n${e}`);
   }
-  let baseURL = process.env.baseURL
+  let baseURL = process.env.baseURL || 'https://doaw.folia.app/server'
 
   var image = `${baseURL}/${entropyHex}.gif`
-  const name = words
-  const description = `${words}\n${pk}\n${address}`
+  const name = words.toUpperCase()
+  const description = ``//`${words}\n${pk}\n${address}`
   const external_url = 'https://doaw.folia.app' + `/tokens/${entropyHex}`
   const animation_url = `${baseURL}/nft.html#${entropyHex}`
 

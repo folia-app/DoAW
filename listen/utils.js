@@ -2,9 +2,13 @@ const { ethers } = require("ethers");
 // const contracts = require('doaw-contracts')
 
 function parseTokenId(tokenId) {
+  const isNumber = /^\d+$/.test(tokenId);
+  const isHex = /^0x[0-9A-Fa-f]+$/.test(tokenId);
+  if (!isNumber && !isHex) tokenId = "0x" + tokenId
   // check if tokenId would be accepted by BigNumber as a number
   tokenId = ethers.BigNumber.from(tokenId)
-  const entropyHex = tokenId.toHexString(16).replace('0x', '').padStart(16, '0')
+  const entropyHex = tokenId.toHexString(16).replace('0x', '').padStart(32, '0')
+  console.log({ entropyHex })
   let data = hexToBytes(entropyHex)
   const words = ethers.utils.entropyToMnemonic(data)
   const path = ethers.utils.defaultPath

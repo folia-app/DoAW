@@ -14,7 +14,9 @@
     "postinstall": "webpack --mode production",
     "optimize": "npx gifsicle -O2 -b --colors 256 -o foo.gif --resize-width 512",
     "webgif": "npx webgif  -d 66",
-    "webgif-long": "npx webgif  -d 98"
+    "webgif-long": "npx webgif  -d 98",
+    "dl-gifs": "./dl-gifs.sh",
+    "real-server": "pm2 start server/app.js --name doaw --watch --ignore-watch=\"node_modules\""
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
