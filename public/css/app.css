@@ -55,6 +55,15 @@ p.customfont {
   cursor: crosshair;
   z-index: 2;
 }
+
+.sh {
+  font-family: "zx-spectrum", monospace;
+  font-size: 4vw;
+  line-height: 8vw;
+  cursor: crosshair;
+  z-index: 2;
+}
+
 #index{
   padding-top:100vh;
   text-align:center;

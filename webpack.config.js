@@ -65,6 +65,27 @@ module.exports = {
       hash: true,
       title: 'DoAW',
       metaDesc: 'DoAW',
+      template: path.resolve(__dirname, "src/shadow.ejs"),
+      filename: 'shadow.html',
+      inject: false,
+      minify: true,
+      templateParameters: (compilation, assets, options) => {
+        // const fs = require('fs');
+        // const p5Content = fs.readFileSync('./public/p5.min.js', 'utf-8');
+        return {
+          compilation,
+          webpackConfig: options.webpackConfig,
+          assets,
+          options,
+          // fs,
+          // p5Content,
+        };
+      },
+    }),
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: 'DoAW',
+      metaDesc: 'DoAW',
       template: path.resolve(__dirname, "src/nft.ejs"),
       filename: 'nft.html',
       inject: false,
