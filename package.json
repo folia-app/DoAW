@@ -22,7 +22,7 @@
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
-    "doaw-contracts": "git+https://github.com/folia-app/DoAW-contracts",
+    "doaw-contracts": "git+https://github.com/folia-app/DoAW-contracts#446e9daaa5100c51207287579b7338944fef692d",
     "dotenv": "^16.0.1",
     "ethers": "^5.7.0",
     "express": "~4.16.1",

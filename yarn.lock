@@ -1853,9 +1853,9 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
-"doaw-contracts@git+https://github.com/folia-app/DoAW-contracts":
+"doaw-contracts@git+https://github.com/folia-app/DoAW-contracts#446e9daaa5100c51207287579b7338944fef692d":
   version "1.0.0"
-  resolved "git+https://github.com/folia-app/DoAW-contracts#1bab607d501675aa8735f10fd191d7229c052b81"
+  resolved "git+https://github.com/folia-app/DoAW-contracts#446e9daaa5100c51207287579b7338944fef692d"
   dependencies:
     erc721a "^4.2.3"
 
