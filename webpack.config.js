@@ -63,8 +63,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       hash: true,
-      title: 'DoAW',
-      metaDesc: 'DoAW',
+      title: 'shaDoAW',
+      metaDesc: 'shaDoAW',
       template: path.resolve(__dirname, "src/shadow.ejs"),
       filename: 'shadow.html',
       inject: false,

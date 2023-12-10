@@ -57,11 +57,8 @@ p.customfont {
 }
 
 .sh {
-  font-family: "zx-spectrum", monospace;
   font-size: 4vw;
-  line-height: 8vw;
-  cursor: crosshair;
-  z-index: 2;
+  line-height: 4vw;
 }
 
 #index{
