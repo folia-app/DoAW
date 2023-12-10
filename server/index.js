@@ -16,9 +16,9 @@ router.get('/', function (req, res, next) {
 
 
 router.get('/v1/metadata/*', async function (req, res, next) {
-  let entropyHex, words, pk, address
+  let entropyHex, words
   try {
-    ({ entropyHex, words, pk, address } = parseTokenId(req.params[0]));
+    ({ entropyHex, words, tokenId } = parseTokenId(req.params[0]));
   } catch (e) {
     return boo(res, `Invalid Token\n${e}`);
   }
@@ -27,7 +27,7 @@ router.get('/v1/metadata/*', async function (req, res, next) {
   var image = `${baseURL}/${entropyHex}.gif`
   const name = words.toUpperCase()
   const description = ``//`${words}\n${pk}\n${address}`
-  const external_url = 'https://doaw.folia.app' + `/tokens/${entropyHex}`
+  const home_url = 'https://doaw.folia.app' + `/tokens/${tokenId}`
   const animation_url = `${baseURL}/nft.html#${entropyHex}`
 
   // the sauce
@@ -35,10 +35,10 @@ router.get('/v1/metadata/*', async function (req, res, next) {
     name,
     description,
     // opensea
-    external_url,
+    external_url: 'https://doaw.folia.app',
     image,
     // rarebits
-    home_url: external_url,
+    home_url,
     image_url: image,
 
     animation_url,

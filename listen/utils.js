@@ -8,7 +8,6 @@ function parseTokenId(tokenId) {
   // check if tokenId would be accepted by BigNumber as a number
   tokenId = ethers.BigNumber.from(tokenId)
   const entropyHex = tokenId.toHexString(16).replace('0x', '').padStart(32, '0')
-  console.log({ entropyHex })
   let data = hexToBytes(entropyHex)
   const words = ethers.utils.entropyToMnemonic(data)
   const path = ethers.utils.defaultPath
@@ -16,6 +15,7 @@ function parseTokenId(tokenId) {
   const pk = hdNode.derivePath(path).privateKey
   const wallet = new ethers.Wallet(pk)
   const address = wallet.address
+  tokenId = tokenId.toString(10)
   return {
     tokenId,
     entropyHex,
