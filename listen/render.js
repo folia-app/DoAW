@@ -121,9 +121,9 @@ const generateGif = async function (tokenId) {
     fs.accessSync(filename)
     console.log(`gif already exists at ${filename}, removing from currentSpans queue`)
     currentSpawns.splice(currentSpawns.indexOf(tokenId), 1)
-    pokeOS(tokenInfo.tokenId)
     console.log('wait 500')
     await wait(500)
+    pokeOS(tokenInfo.tokenId)
     return
   } catch (_) { }
 
@@ -172,9 +172,9 @@ const generateGif = async function (tokenId) {
     } catch (e) {
       console.log(`failed to optimize gif, exited with error:`, { e })
     }
-    pokeOS(tokenId)
-    console.log('wait 500')
     await wait(500)
+    console.log('wait 500')
+    pokeOS(tokenId)
 
     console.log('done trying to optimize gif, OK to remove from queue whether optimization worked or not')
     currentSpawns.splice(currentSpawns.indexOf(tokenId), 1)
