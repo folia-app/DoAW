@@ -126,7 +126,9 @@ const generateGif = async function (tokenId) {
   const child = spawn(`yarn`, ['webgif', '-u', `${process.env.GIF_URL}#${tokenId}`, '-o', filename])
 
   child.stdout.on('data', data => {
-    console.log(`stdout-${tokenId}:\n${data}`);
+    if (data != '.') {
+      console.log(`stdout-${tokenId}:\n${data}`);
+    }
   });
 
   child.stderr.on('data', data => {
