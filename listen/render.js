@@ -15,6 +15,9 @@ const servers = process.env.SERVERS ? parseInt(process.env.SERVERS) : 1
 const maxSpawns = Math.ceil((cores > 4 ? cores - 4 : 1) / servers)
 console.log(`max spawns: ${maxSpawns}`)
 
+const contracts = require('doaw-contracts')
+const contractAddress = contracts['DoAW']['networks'][getNetwork()].address;
+
 let totalTime = 0
 let numberOfGifs = 0
 
@@ -89,7 +92,7 @@ var addToQueue = async function (tokenId) {
 
 const pokeOS = async (tokenId) => {
   // if token exists on chain, refresh it on opensea
-  const address = process.env.CONTRACT_ADDRESS // TODO: add contract address
+  const address = contractAddress
   refreshOpensea(getNetwork(), address, tokenId.toString()).then((response) => {
     console.log(`refresh metadata for ${tokenId} on opensea resulted in ${response.status}`, { response })
   }).catch(e => {
