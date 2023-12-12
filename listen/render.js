@@ -172,9 +172,10 @@ const generateGif = async function (tokenId) {
     } catch (e) {
       console.log(`failed to optimize gif, exited with error:`, { e })
     }
+    const tokenInfo = parseTokenId(tokenId)
     await wait(500)
     console.log('wait 500')
-    pokeOS(tokenId)
+    pokeOS(tokenInfo.tokenId)
 
     console.log('done trying to optimize gif, OK to remove from queue whether optimization worked or not')
     currentSpawns.splice(currentSpawns.indexOf(tokenId), 1)
