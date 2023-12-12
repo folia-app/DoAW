@@ -1,5 +1,6 @@
 const { ethers } = require("ethers");
 // const contracts = require('doaw-contracts')
+var fetch = require("node-fetch")
 
 console.log(`opensea api = ${process.env.opensea_api}`)
 function parseTokenId(tokenId) {
@@ -103,4 +104,12 @@ function boo(res, int) {
   return res.status(404).send(int.toString() || '404')
 }
 
-module.exports = { refreshOpensea, boo, getNetwork, getNetworkId, getProvider, parseTokenId, hexToBytes }
+async function wait(time = 100) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, time)
+  })
+}
+
+module.exports = { wait, refreshOpensea, boo, getNetwork, getNetworkId, getProvider, parseTokenId, hexToBytes }

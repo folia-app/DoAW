@@ -1,9 +1,9 @@
 const { ethers, utils } = require("ethers");
-// var fetch = require("node-fetch")
+var fetch = require("node-fetch")
 const fs = require('fs');
 const client = require('https');
 const { spawn } = require('child_process');
-const { refreshOpensea, getNetwork, parseTokenId } = require('./utils.js')
+const { wait, refreshOpensea, getNetwork, parseTokenId } = require('./utils.js')
 const path = require('path')
 const preloads = {}
 let lastCheckedQueueLength = 0
@@ -102,6 +102,8 @@ const pokeOS = async (tokenId) => {
 }
 
 const generateGif = async function (tokenId) {
+
+  const tokenInfo = parseTokenId(tokenId)
   // generate gif
   console.log(`generateGif ${tokenId}`)
   if (currentSpawns.length >= maxSpawns) {
@@ -119,8 +121,9 @@ const generateGif = async function (tokenId) {
     fs.accessSync(filename)
     console.log(`gif already exists at ${filename}, removing from currentSpans queue`)
     currentSpawns.splice(currentSpawns.indexOf(tokenId), 1)
-    pokeOS(tokenId)
-
+    pokeOS(tokenInfo.tokenId)
+    console.log('wait 500')
+    await wait(500)
     return
   } catch (_) { }
 
