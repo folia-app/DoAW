@@ -1,6 +1,7 @@
 const { ethers } = require("ethers");
 // const contracts = require('doaw-contracts')
 
+console.log(`opensea api = ${process.env.opensea_api}`)
 function parseTokenId(tokenId) {
   const isNumber = /^\d+$/.test(tokenId);
   const isHex = /^0x[0-9A-Fa-f]+$/.test(tokenId);
