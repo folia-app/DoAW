@@ -79,7 +79,7 @@ try {
     }
     entropyHex = uint8ArrayToHex(data);
     currentMnemonic = words;
-    const derivationPath = `m/44'/60'/0'/0/${addressIndex}`;
+    // const derivationPath = `m/44'/60'/0'/0/${addressIndex}`;
     // const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
     // const account = hdNode.derivePath(derivationPath);
     // privkey = account.privateKey
