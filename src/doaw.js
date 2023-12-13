@@ -35,7 +35,10 @@ try {
     console.log('currentMnemonic', currentMnemonic)
     addMnemonicToScreen()
     const derivationPath = `m/44'/60'/0'/0/0/${addressIndex}`;
-
+    const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
+    const account = hdNode.derivePath(derivationPath);
+    privkey = account.privateKey
+    address = account.address
 
     code_el.innerHTML +=
       "<span class='index'> " + derivationPath + " </span>"; // addressIndex rotation endless addressIndex++
