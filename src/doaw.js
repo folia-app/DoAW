@@ -33,13 +33,13 @@ try {
     wdiv.innerHTML = "";
     wdivnft.innerHTML = "";
     console.log('currentMnemonic', currentMnemonic)
-    addMnemonicToScreen()
+    addMnemonicToScreen(addressIndex)
+
     const derivationPath = `m/44'/60'/0'/0/${addressIndex}`;
     const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
     const account = hdNode.derivePath(derivationPath);
     privkey = account.privateKey
     address = account.address
-
     code_el.innerHTML +=
       "<span class='index'> " + derivationPath + " </span>"; // addressIndex rotation endless addressIndex++
     code_el.innerHTML +=
@@ -79,12 +79,12 @@ try {
     }
     entropyHex = uint8ArrayToHex(data);
     currentMnemonic = words;
-    // const derivationPath = `m/44'/60'/0'/0/${addressIndex}`;
-    // const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
-    // const account = hdNode.derivePath(derivationPath);
-    // privkey = account.privateKey
-    // // const ethPubKey = account.publicKey
-    // address = account.address
+    const derivationPath = `m/44'/60'/0'/0/${addressIndex}`;
+    const hdNode = utils.HDNode.fromMnemonic(currentMnemonic);
+    const account = hdNode.derivePath(derivationPath);
+    privkey = account.privateKey
+    // const ethPubKey = account.publicKey
+    address = account.address
 
     // loadSounds()
   }
