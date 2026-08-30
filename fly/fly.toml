@@ -1,0 +1,52 @@
+# DoAW — "Death of A Wallet", Joan Heemskerk.
+#
+# Stays warm rather than scaling to zero. The metadata server on its own could
+# scale to zero happily, but listen/listen.js has to hold a live subscription to
+# the contract's Transfer events to render a GIF when a token is minted, and a
+# stopped machine sees nothing. It also replays every past Transfer on boot:
+# each already-rendered token short-circuits on the existing file, but still
+# pokes OpenSea to refresh — so frequent cold starts would mean repeatedly
+# firing 288 refresh requests at OpenSea for no reason.
+
+app            = "folia-doaw"
+primary_region = "fra"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT     = "3003"
+
+  # Read only by server/index.js, and it is the origin already published in the
+  # metadata OpenSea has stored — not the address this app is reached on.
+  baseURL  = "https://doaw.folia.app/server"
+
+  # --- renderer ------------------------------------------------------------
+  network       = "homestead"
+  # Tenderly, not Infura: the droplet's Infura key is dead, and Infura caps
+  # eth_getLogs at 10k blocks, which the startup catch-up scan cannot live with.
+  RPC_URL       = "https://mainnet.gateway.tenderly.co"
+  # The contract was deployed in late 2023; scanning from 0 is dead range.
+  START_BLOCK   = "18000000"
+  LISTEN        = "true"
+  GENERATE_GIFS = "true"
+  # The renderer drives a headless browser at a page only this app serves.
+  GIF_URL       = "http://localhost:3003/gif.html"
+  # Skip the OpenSea refresh for GIFs that already exist; see listen/render.js.
+  POKE_EXISTING = "false"
+
+[http_service]
+  internal_port        = 3003
+  force_https          = true
+  auto_stop_machines   = false
+  auto_start_machines  = true
+  min_machines_running = 1
+
+[[mounts]]
+  source      = "doaw_media"
+  destination = "/data"
+
+[[vm]]
+  size   = "shared-cpu-1x"
+  memory = "1gb"

@@ -121,9 +121,17 @@ const generateGif = async function (tokenId) {
     fs.accessSync(filename)
     console.log(`gif already exists at ${filename}, removing from currentSpans queue`)
     currentSpawns.splice(currentSpawns.indexOf(tokenId), 1)
-    console.log('wait 500')
-    await wait(500)
-    pokeOS(tokenInfo.tokenId)
+    // listen.js replays every past Transfer on boot, so this branch is taken
+    // once per already-rendered token at startup. Poking OpenSea for each of
+    // them fires a few hundred refresh requests that ask OpenSea to re-read
+    // metadata that has not changed. Worth doing after an actual render (below,
+    // unconditionally); not worth doing for the backlog. Default stays true so
+    // the droplet's behaviour is unchanged.
+    if (process.env.POKE_EXISTING !== 'false') {
+      console.log('wait 500')
+      await wait(500)
+      pokeOS(tokenInfo.tokenId)
+    }
     return
   } catch (_) { }
 

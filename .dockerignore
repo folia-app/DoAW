@@ -1,0 +1,14 @@
+node_modules
+.git
+*.log
+.env
+
+# Media lives on the volume, not in the image.
+gifs
+
+# The webpack sources; dist/ is vendored pre-built (see fly/Dockerfile).
+src
+
+# NOTE: do not add `listen` here. server/index.js requires ../listen/utils.js,
+# and excluding it produces an image that builds and deploys cleanly and then
+# crash-loops on MODULE_NOT_FOUND. Same failure mode as viper's views/.

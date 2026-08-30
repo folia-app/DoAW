@@ -34,3 +34,14 @@ artifacts
 .DS_Store
 ../.DS_Store
 solc-output/
+# The vendored production bundle is committed deliberately — package.json's
+# `postinstall: webpack --mode production` rebuilds dist/ on every install, so
+# the droplet's built output cannot be reproduced from source and is copied in
+# by fly/Dockerfile instead.
+#
+# The `*.html` and `dist/` rules above would silently swallow four of its files,
+# including gif.html (the page the GIF renderer screenshots) and nft.html (the
+# animation_url every token points at). The result would be a repo that clones
+# and builds cleanly into an image whose renderer draws a 404.
+!vendor/
+!vendor/**

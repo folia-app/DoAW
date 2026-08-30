@@ -92,12 +92,52 @@ var refreshOpensea = function (network, address, tokenID) {
   })
 }
 
+/**
+ * The chain connection.
+ *
+ * This used to be InfuraProvider unconditionally, with the project id in .env.
+ * That key is now dead (Infura answers `401 invalid project id`), which is why
+ * the listener has rendered nothing since September 2024 and its log is a wall
+ * of `network block skew detected; skipping block events`.
+ *
+ * Swapping in a fresh Infura key would not be enough on its own: Infura now
+ * caps eth_getLogs at a 10,000 block range, and the startup scan in listen.js
+ * asks for every Transfer since block 0. So RPC_URL takes precedence, and
+ * Infura remains only as the fallback the droplet still uses.
+ */
 function getProvider() {
-  const provider = new ethers.providers.InfuraProvider(
+  if (process.env.RPC_URL) {
+    return new ethers.providers.JsonRpcProvider(process.env.RPC_URL)
+  }
+  return new ethers.providers.InfuraProvider(
     getNetwork(),
     process.env.INFURA_API_KEY,
-  );
-  return provider
+  )
+}
+
+/**
+ * Read historical logs in chunks, halving the range whenever a provider
+ * complains that it is too wide. Providers disagree about the limit — Infura
+ * allows 10k blocks, drpc a little more, Tenderly a million — and a provider
+ * that refuses the whole history is indistinguishable, from the caller's side,
+ * from a chain with no events. That is the failure this replaces: the old
+ * one-shot `queryFilter(filter, 0)` returned nothing and looked like success.
+ */
+async function scanLogs(contract, filter, fromBlock, toBlock, chunk = 500000) {
+  const found = []
+  let from = fromBlock
+  while (from <= toBlock) {
+    const to = Math.min(from + chunk - 1, toBlock)
+    try {
+      found.push(...(await contract.queryFilter(filter, from, to)))
+      from = to + 1
+    } catch (e) {
+      if (chunk <= 2000) throw e
+      chunk = Math.floor(chunk / 2)
+      console.log(`log range rejected, retrying with chunk ${chunk}`)
+    }
+  }
+  return found
 }
 
 function boo(res, int) {
@@ -112,4 +152,5 @@ async function wait(time = 100) {
   })
 }
 
-module.exports = { wait, refreshOpensea, boo, getNetwork, getNetworkId, getProvider, parseTokenId, hexToBytes }
+module.exports = {
+  scanLogs, wait, refreshOpensea, boo, getNetwork, getNetworkId, getProvider, parseTokenId, hexToBytes }

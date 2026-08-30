@@ -1,0 +1,42 @@
+{
+  "name": "doaw-server",
+  "version": "1.0.0",
+  "private": true,
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node ./server/app.js",
+    "webgif": "npx webgif -d 66"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "_comment": [
+    "Exact versions, not ranges, matched to what the droplet resolved.",
+    "This is not superstition: ethers stamps its own version into the text of",
+    "its errors, and server/index.js returns that text in the 404 body for an",
+    "invalid token id. A floating ^5.7.0 picked up 5.8.0 and changed a",
+    "published response.",
+    "",
+    "puppeteer 1.20.0 is pinned because it is the renderer, not a dev tool. It",
+    "bundles Chromium revision linux-686378 (2019), which is the browser that",
+    "drew all 288 published GIFs; webgif screenshots that browser frame by",
+    "frame. A newer Chromium would render the artwork differently.",
+    "",
+    "The `webgif` script is required, not convenience: listen/render.js spawns",
+    "`yarn webgif -u ... -o ...`, so the script name is effectively an API."
+  ],
+  "dependencies": {
+    "cookie-parser": "1.4.6",
+    "cors": "2.8.5",
+    "debug": "2.6.9",
+    "doaw-contracts": "git+https://github.com/folia-app/DoAW-contracts#9c4d4c5428ecd790e66f8665b9350680c66342ab",
+    "dotenv": "16.3.1",
+    "ethers": "5.7.2",
+    "express": "4.16.4",
+    "http-errors": "1.6.3",
+    "morgan": "1.9.1",
+    "node-fetch": "2.7.0",
+    "puppeteer": "1.20.0",
+    "webgif": "1.1.0"
+  }
+}
