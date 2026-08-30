@@ -25,6 +25,29 @@ app.use(express.static(path.join(__dirname, '..', 'gifs')));
 app.use('/', indexRouter);
 // app.use('/get', getRouter);
 
+/**
+ * Anything not found falls back to the loading frame, with a 200.
+ *
+ * This is not new behaviour — it is the droplet's, moved into the app. There,
+ * /server/* was served by nginx straight off the filesystem with
+ *
+ *     try_files /dist$uri /gifs$uri /dist/loading.png =404;
+ *     error_page 404 =200 /dist/loading.png;
+ *
+ * so a token whose GIF had not been rendered yet showed the loading frame
+ * rather than a broken image. Fly serves these paths from express instead, and
+ * without this a fresh mint would 404 for the ~100 seconds its GIF takes to
+ * render — and OpenSea would happily cache that.
+ *
+ * /v1/* is deliberately excluded: on the droplet the metadata routes were a
+ * different nginx server block with no such fallback, and their 404 bodies are
+ * part of what scripts/parity.js pins.
+ */
+app.use(function (req, res, next) {
+  if (req.path.startsWith('/v1/')) return next(createError(404));
+  return res.status(200).sendFile(path.join(__dirname, '..', 'dist', 'loading.png'));
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
