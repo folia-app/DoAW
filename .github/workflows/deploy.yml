@@ -1,0 +1,58 @@
+# Deploy to Fly on push, so what runs is always a commit that exists in git.
+#
+# Needs FLY_API_TOKEN in the repo secrets:
+#   gh secret set FLY_API_TOKEN -b "$(flyctl tokens create deploy -a folia-doaw)"
+#
+# The image carries a headless Chromium (puppeteer 1.20, revision 686378 — the
+# browser that drew every published GIF), so it is large and the build is not
+# fast. It also cannot be built on an arm Mac: that Chromium is x86-only and
+# will not run under Rosetta. CI runners are x86, which makes this the most
+# reliable place to build it.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-folia-doaw
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          flyctl deploy \
+            --config fly/fly.toml \
+            --dockerfile fly/Dockerfile \
+            --app folia-doaw \
+            --build-arg "GIT_SHA=${GITHUB_SHA::7}" \
+            --build-arg "BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --ha=false --yes
+
+      # A deploy that returns 200 is not proof of a working deploy: the whole
+      # reason two tokens went unrendered for two years is that the missing-GIF
+      # path answers 200 with a placeholder. So check the content type, not the
+      # status — a real GIF is image/gif, the placeholder is image/png.
+      - name: Verify it serves artwork, not the placeholder
+        run: |
+          HOST=https://folia-doaw.fly.dev
+          for i in $(seq 1 30); do
+            CT=$(curl -fsS -o /dev/null -w '%{content_type}' -m 20 \
+                 "$HOST/6741418ca834d404ac900a323cc4b69f.gif") || CT=""
+            case "$CT" in
+              image/gif*) echo "serving artwork ($CT)"; break ;;
+            esac
+            [ "$i" = 30 ] && { echo "never served a real GIF (last: $CT)" >&2; exit 1; }
+            sleep 10
+          done
+          curl -fsS -m 20 "$HOST/v1/metadata/1" | grep -q '"image"' \
+            || { echo "metadata missing image field" >&2; exit 1; }
+          echo "metadata ok"
