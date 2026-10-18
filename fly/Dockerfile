@@ -26,6 +26,24 @@
 # be reproduced from source.
 FROM node:18-bullseye-slim
 
+# bullseye is past end of life, so deb.debian.org no longer carries its pool and
+# every pinned patch version below 404s -- libnss3 3.61-1+deb11u7, libcups2
+# 2.3.3op2-3+deb11u10 and the rest. The packages themselves still exist, byte for
+# byte, on archive.debian.org; only the mirror moved. So point apt there rather
+# than move to bookworm, which would take gifsicle from 1.92 to 1.93 and change
+# every GIF this image produces. The base image is a version pin (see above).
+#
+# Check-Valid-Until is disabled because an archived Release file is past its
+# expiry by design, and apt treats that as fatal rather than as the expected
+# state of a frozen suite.
+RUN for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list; do \
+      [ -f "$f" ] || continue; \
+      sed -i -e 's|http://deb.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
+             -e 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' \
+             -e 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' "$f"; \
+    done \
+ && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99archive
+
 # Chromium 78's runtime libraries. puppeteer downloads the browser itself during
 # npm install; these are what that binary dynamically links against.
 RUN apt-get update && apt-get install -y --no-install-recommends \
